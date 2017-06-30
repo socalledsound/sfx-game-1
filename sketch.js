@@ -68,7 +68,6 @@ var numContainers =5;
 var boxHeight = 80;
 var interface;
 
-var background_color = [11,41,89];
 var background_color = [61,39,17];
 var background_color = [51,52,58];
 var interfaceColor = [200,200,200];
