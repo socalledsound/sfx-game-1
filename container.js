@@ -8,7 +8,7 @@ var Container = function(x,y,width,height,meridian,color,numCells,sounds) {
 	this.numCells = numCells;
 	this.draggable = false;
 	this.cells=[];
-	this.cellColor = [2,12,51];
+	
 	this.interfaceColor = [200,200,200];
 	this.currentColumn = 0;
 	this.sounds = sounds;
@@ -22,6 +22,7 @@ var Container = function(x,y,width,height,meridian,color,numCells,sounds) {
 
 	this.initCells = function() {
 				 this.initKeys = Object.keys(this.sounds);
+				 console.log(this.sounds);
 				// this.scrambledKeys = this.initKeys.sort(function(){return Math.random() * 2 -1;});
 				// console.log(this.sounds);
 				//  console.log(this.scrambledKeys);
@@ -45,38 +46,26 @@ var Container = function(x,y,width,height,meridian,color,numCells,sounds) {
 				// var cellKey = this.scrambledKeys[i].charAt(0);
 				 // console.log(cellSound);
 				// var sound = new Howl({src:[this.sound] });
-				this.cells[i] = new Cell(x, y, width, height, this.cellColor, cellSound);
+				this.cells[i] = new Cell(x, y, width, height, cellSound);
 				 // console.log(this.cells[i]);
 			}
 	},
 
 	this.checkMeridian = function() {
-		// var that = this;
-		// console.log(this.meridian);
+
 		this.cells.forEach(function(cell,index){
-				// console.log(this.meridian);
-				// console.log(cell.y);
+
 			if((cell.y > (this.meridian-50)) && (cell.y < (this.meridian+40)) && !cell.playing) {
 				// cell.cellColor = [200,0,0];
 				cell.markAsMeridian();
-				// console.log(cell.key);
-				// console.log(this);
+
 				this.meridianKey = cell.key;
-				// console.log(this.meridianKey);
-				// return this.meridianKey
-				// return true
-				// cell.playing = true;
-				//   cell.sound.play();
-				// setTimeout(cell.cellPlayingFalse.bind(cell),1000);
-				// this.meridianKey =  this.scrambledKeys[0].charAt(0);
 			}
 			else {
 				cell.onMeridian =false;
 				cell.resetCell();
-				
-				// return false
+
 			}
-			// console.log(this.meridianKey);
 			 
 		}, this)	
 		return this.meridianKey
@@ -103,7 +92,7 @@ var Container = function(x,y,width,height,meridian,color,numCells,sounds) {
 				{
 				 // console.log(cell.key);
 				 // console.log(key);
-				 cell.resetCell();
+				 cell.markUnSolved();
 				 // this.containerSolved = false;
 				 // console.log(this.containerSolved);
 			}
@@ -135,7 +124,29 @@ var Container = function(x,y,width,height,meridian,color,numCells,sounds) {
 
 	},
 
+	// this.playSolution = function() {
+	
+	// var solvedSounds=[];
+	
+	// 	// this.cells.filter(function(cell, i , cells){
+			
+	// 	// 	return cells.
+	// 	// })	
 
+	// 	this.cells.forEach(function(cell){
+	// 		if(cell.solved) {
+	// 			solvedSounds.push(cell.sound);
+	// 		}
+	// 	})	
+
+
+	// 	solvedSounds.forEach(function(sound,index){
+	// 			// sound.play();
+	// 		 setTimeout(sound.play.bind(sound),1000*index);
+
+	// 	})
+
+	// },
 
 
 	this.scrambleSounds = function(sounds,keys) {
@@ -191,76 +202,60 @@ var Container = function(x,y,width,height,meridian,color,numCells,sounds) {
 
 
 
-		this.checkCellsForClick = function(){
-		var that = this;
-			this.cells.forEach(function(cell,index){
-				cell.checkClick();
-			})
+	// 	this.checkCellsForClick = function(){
+	// 	var that = this;
 
-	},
+
+	// },
 
 
 	this.display = function() {
-		// var that = this;
-		// fill(this._color);
-		// rect(this._x, this._y, this._width, this._height);
-	// console.log(this.cells);
 			fill(this.interfaceColor);
 			stroke(this.interfaceColor);
 			triangle(this.upperTriangles.a,this.upperTriangles.b,this.upperTriangles.c,this.upperTriangles.d,this.upperTriangles.e,this.upperTriangles.f);
 			triangle(this.lowerTriangles.a,this.lowerTriangles.b,this.lowerTriangles.c,this.lowerTriangles.d,this.lowerTriangles.e,this.lowerTriangles.f);
-
-
 			this.cells.forEach(function(cell,index){
-				// console.log(cell.cellColor);
-				// console.log(index);
-				fill(cell.cellColor);
-				strokeWeight(0.5);
-				// console.log(cell.x);
-				// console.log(cell.cellColor);
-				// rect(that._x+(that._width/20), (that._y)+((that._height/that.numCells)*index), that._width*0.9, that._height*.25);
-				rect(cell.x-5,cell.y,cell.width,cell.height);
-				//rect(250,100,90,80);
-			}) 
-			
-		
-
+				cell.updateColor();
+				cell.display();
+			}) 		
 	},
 
 	this.checkClick = function() {
 		if(this.checkRect(mouseX, mouseY,this._x,this._y,this._width,this._height)) {
-				this.draggable = true;
-				 console.log(this.draggable);
+				this.clicked = true;
 		}
+		else {
+			 //this.draggable = false;
+		};
+		
+		this.cells.forEach(function(cell,index){
+				cell.checkClick();
+				// cell.updateColor();
+				// cell.display();
+			})
+	},
+
+
+		this.checkDraggable = function() {
+		if(this.checkRect(mouseX, mouseY,this._x,this._y,this._width,this._height)) {
+				this.draggable = true;
+		}
+		else {
+			 //this.draggable = false;
+		};
+		
+		// this.cells.forEach(function(cell,index){
+		// 		cell.checkClick();
+		// 		cell.updateColor();
+		// 		cell.display();
+		// 	})
 	},
 
 
 	
-	this.checkRect = function() {
-		
+	this.checkRect = function() {		
 		return (mouseX > this._x && mouseX < this._x + this._width && mouseY > this._y && mouseY < this._y + this._height)		
 	},
-
-	this.updateClick = function() {
-		var that = this;
-		that.cells.forEach(function(cell,index){
-			if(cell.clicked && !cell.playing) {
-				// console.log(cell.sound);
-			 	cell.sound.play();
-				cell.playing= true;
-			}
-			else {
-				cell.sound.stop();
-				cell.playing = false;
-				cell.clicked = false;
-			}
-			fill(cell.cellColor);
-			strokeWeight(0.5);
-			rect(cell.x-5,cell.y,cell.width,cell.height);
-
-		})
-	},
-
 
 
 	this.unClick = function() {
@@ -300,7 +295,7 @@ var Container = function(x,y,width,height,meridian,color,numCells,sounds) {
 	},
 
 	this.move = function() {
-		// console.log(mouseY);
+
 		if(this._y > 0 && this._y < (1000 - this._height)) {
 		this._y = mouseY;
 		this.moveCells();
@@ -357,56 +352,7 @@ var Container = function(x,y,width,height,meridian,color,numCells,sounds) {
 
 		return currentColumn;
 		
-	},
-
-	this.startColor = function() {
-
-		this.cells.forEach(function(cell,index){
-		// this.checkRedLine();	
-		cell.cellColor = [2,12,51];
-		cell.sound.stop();
-		});
 	}
-
-
-
-	// this.highlight = function() {
-
-	// 	this.cells.forEach(function(cell,index){
-	// 	// this.checkRedLine();	
-	// 	cell.cellColor = [23,225,239];
-	// 	});
-	// },
-
-	// this.resetColor = function() {
-
-
-	// },
-
-
-	// this.makeRed = function() {
-
-	// 	this.cells.forEach(function(cell,index){
-	// 	// this.checkRedLine();	
-	// 	cell.cellColor = [200,0,0];
-	// 	});
-	// },
-
-	// this.makeWhite = function() {
-
-	// 	this.cells.forEach(function(cell,index){
-	// 	// this.checkRedLine();	
-	// 	cell.cellColor = [200,200,200];
-	// 	});
-	// },
-
-	// checkRedLine = function() {
-	// 	this.cells.forEach(function(cell,index){
-	// 		if (this.cell) {
-
-	// 		}
-	// 	})	
-	// }
 
 
 }

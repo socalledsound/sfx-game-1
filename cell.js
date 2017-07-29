@@ -1,9 +1,16 @@
-var Cell = function(x, y, width, height, color, sound) {
+var Cell = function(x, y, width, height,sound) {
 	this.x 			= 	x;
 	this.y 			= 	y;
 	this.width 		=	width;
 	this.height 	= 	height;
-	this.cellColor 	=	color;
+	
+	this.cellStartColor = [2,12,51];
+	this.highlightColor = [23,225,239];
+	this.cellMeridianColor = [10,10,80];
+	this.cellClickedColor =  [180,180,120];
+
+	this.cellColor = this.cellStartColor;
+	
 	
 	this.key 		= 	Object.keys(sound);
 	this.sound		=	new Howl({src:[sound[this.key]]});
@@ -11,6 +18,7 @@ var Cell = function(x, y, width, height, color, sound) {
 
 	this.playing	=	false;
 	this.clicked 	=	false;
+	this.highlighted = false;
 	this.onMeridian = 	false;
 	this.solved 	= 	false;
 
@@ -20,73 +28,98 @@ var Cell = function(x, y, width, height, color, sound) {
 	// 	rect(this._x, this._y, this._width, this._height);
 	// }
 	this.cellPlayingFalse = function() {
-		// console.log("see it");
-		if(this.playing = true) { this.playing =false};
+		this.playing =false;
+		this.clicked = false;
 	},
 
 
 
 	this.checkClick = function(){
 				if( mouseX > this.x && mouseX < this.x +80 && mouseY > this.y && mouseY < this.y +80) {
-						this.playSoundAnimation();
-						console.log("clicked");
-						console.log(this.key);
-				  		console.log(this.key);
-				 		 console.log(this.onMeridian);
 						this.clicked = true;
-					//}
+						 this.playSoundAnimation();
+						
+						
 				}	
 
 	},
 
+	this.updateColor = function() {
+			
+			if(!this.clicked) {
 
+				if (this.solved) {
+					this.cellColor = this.highlightColor;
+				}
+				else if (this.onMeridian) {
+					this.cellColor = this.cellMeridianColor;
+				}
+				else {
+					this.cellColor = this.cellStartColor;
+				}
+			}
+			else {
+				this.cellColor = this.cellClickedColor;
+			}
+
+
+
+			
+
+	},
+
+
+	this.display = function() {
+		// console.log(this.cellColor);
+				fill(this.cellColor);
+				strokeWeight(0.5);
+				rect(this.x-5,this.y,this.width,this.height);
+	},
 
 	this.markAsMeridian = function() {
 		this.onMeridian = true;
-		this.cellColor = [10,10,80];
 	},
 
 
 	this.markAsSolved = function() {
 		this.solved = true;
-		this.cellColor = [23,225,239];
+	},
 
+	this.markUnSolved = function() {
+		this.solved = false;
 	},
 
 	this.resetCell = function() {
-		 // console.log("see reset");
-		// this.onMeridian = false;
-		this.solved = false;
-		if (this.onMeridian===true) {
-			this.cellColor = [10,10,80];
-		}
-		else {
-		this.cellColor = [2,12,51];			
-		}
+		// this.solved = false;
+		this.playing =false;
+		this.clicked = false;
+		this.updateColor();
+		this.display();
 
 	},
 
+
 	this.playSound = function(){
+		console.log("playSound");
+		if(this.clicked && !this.playing && !disablePlayback) {
+			console.log("passed conditional")
+			this.playing = true;
+			this.sound.play();
+			setTimeout(this.cellPlayingFalse.bind(this),1000);
+		}
 
-
-			cell.playing = true;
-			cell.sound.play();
-				 // console.log(cell.cellPlayingFalse()); 	
-
-				   setTimeout(cell.cellPlayingFalse.bind(cell),1000);
 	},
 
 
 
 	this.playSoundAnimation = function(){
-		// console.log("play sound animation");
-		this.cellColor = [180,180,120];
-		if (this.solved) {
-			setTimeout(this.markAsSolved.bind(this),300);
-		}
-		else {
-			setTimeout(this.resetCell.bind(this),300);
-		}
+		 console.log("play sound animation");
+		this.cellColor = this.cellClickedColor;
+		this.display();
+		 this.playSound();
+		// setTimeout(this.updateColor.bind(this),300);
+		// setTimeout(this.display.bind(this),300);
+		setTimeout(this.resetCell.bind(this),300);
 	}	
 
 

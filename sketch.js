@@ -1,32 +1,12 @@
 
-// var container1 = new Container({
-// 	x : 100,
-// 	y : 100,
-// 	width : 100,
-// 	height : 320,
-// 	color : [30,100,100],
-// 	numCells : 4
-
-// });
-
-// var cell1 = new CellRow({
-// 	x : 100,
-// 	y : 100,
-// 	width : 80,
-// 	height : 80,
-// 	color : [200,200,200],
-// 	numSquares : 4
-
-// })
-
-
-//new data object
 
 var puzzle1 = { 
 	sounds: [
 	{
-		title: "canvas suitcase zipper",
+		title: "CANVAS SUITCASE ZIPPER, LONG ZIP OPEN OR CLOSE, SIDE COMPARTMENT, GOOD, SEVERAL TAKES",
+		fullSound: "sounds/zippers/canvas-suitcase-zipper/cszipper-full.ogg",
 		solutionKey:"A",
+		alreadySolved: false,
 		clips: [
 			{A1:"sounds/zippers/canvas-suitcase-zipper/cszipper1.ogg"},
 			{A2:"sounds/zippers/canvas-suitcase-zipper/cszipper2.ogg"},
@@ -36,8 +16,10 @@ var puzzle1 = {
 		]
 	},
 	{
-		title: "woodpeckers in a forest",
+		title: "FOREST AMBIENCE, AFTERNOON, MULTIPLE WOODPECKERS JAM, WOODLAND AMBIENCE WITH STREAM AND SMALL BIRDS IN BG",
+		fullSound: "sounds/woodpeckers/woodpeckers-full.ogg",
 		solutionKey:"B",
+		alreadySolved: false,
 		clips: [
 			{B1:"sounds/woodpeckers/woodpeckers1.ogg"},
 			{B2:"sounds/woodpeckers/woodpeckers2.ogg"},
@@ -47,30 +29,36 @@ var puzzle1 = {
 		]
 	},
 	{
-		title: "eerie space tone",
+		title: "EERIE AMBIENCE LARGE, SCARY SPACE, SWEEPING TONES, ENERGY WAVE SWELL OR GIANT SPACESHIP BY, SCI FI",
+		fullSound: "sounds/eerieSpace-new/eerieSpace-new-full.ogg",
 		solutionKey:"C",
+		alreadySolved: false,
 		clips: [
-			{C1:"sounds/eerieSpace/eerieSpace1.ogg"},
-			{C2:"sounds/eerieSpace/eerieSpace2.ogg"},
-			{C3:"sounds/eerieSpace/eerieSpace3.ogg"},
-			{C4:"sounds/eerieSpace/eerieSpace4.ogg"},
-			{C5:"sounds/eerieSpace/eerieSpace5.ogg"},
+			{C1:"sounds/eerieSpace-new/eerieSpace-new-1.ogg"},
+			{C2:"sounds/eerieSpace-new/eerieSpace-new-2.ogg"},
+			{C3:"sounds/eerieSpace-new/eerieSpace-new-3.ogg"},
+			{C4:"sounds/eerieSpace-new/eerieSpace-new-4.ogg"},
+			{C5:"sounds/eerieSpace-new/eerieSpace-new-5.ogg"},
 		]
 	},
 	{
-		title: "giant hummingbird flapping wings -- cartoon",
+		title: "GIANT HUMMINGBIRD DARTING AROUND, WINGS BEATING VERY FAST, HOVERING -- VOCAL -- CARTOON",
+		fullSound: "sounds/hummingbird-new/hummingbird-new-full.ogg",
 		solutionKey:"D",
+		alreadySolved: false,
 		clips: [
-			{D1:"sounds/hummingbird/hummingbird1.ogg"},
-			{D2:"sounds/hummingbird/hummingbird2.ogg"},
-			{D3:"sounds/hummingbird/hummingbird3.ogg"},
-			{D4:"sounds/hummingbird/hummingbird4.ogg"},
-			{D5:"sounds/hummingbird/hummingbird5.ogg"},
+			{D1:"sounds/hummingbird-new/hummingbird-new-1.ogg"},
+			{D2:"sounds/hummingbird-new/hummingbird-new-2.ogg"},
+			{D3:"sounds/hummingbird-new/hummingbird-new-3.ogg"},
+			{D4:"sounds/hummingbird-new/hummingbird-new-4.ogg"},
+			{D5:"sounds/hummingbird-new/hummingbird-new-5.ogg"},
 		]
 	},
 	{
-		title: "high fairy sound design",
+		title: "ANNOYING HIGH FAIRY VOCALIZATION",
+		fullSound: "sounds/highFairy/highFairy-full.ogg",
 		solutionKey:"E",
+		alreadySolved: false,
 		clips: [
 			{E1:"sounds/highFairy/highFairy1.ogg"},
 			{E2:"sounds/highFairy/highFairy2.ogg"},
@@ -107,7 +95,11 @@ var playHeadColor = [239,228,60,100];
 var soundPath = "audio/2017clapOS-DG3__1.mp3";
 var currentKey = "Z";
 var solvedArray = [0,0,0,0,0];
+var solvedObject;
 var solved = false;
+var antiSolveSpell = false;
+var disablePlayback = false;
+var noInterface = false;
 
 var container1sounds=[];
 var container2sounds=[]; 
@@ -125,7 +117,7 @@ var container5sounds=[];
 })
 
 var containerSounds = [container1sounds,container2sounds, container3sounds, container4sounds, container5sounds];
-
+var playbackArray = [];
 
 // console.log(container1sounds);
 
@@ -181,72 +173,34 @@ function setup() {
 }
 
 function draw() {
-// containers.forEach(function(container){
-// container.checkSolution();
-// })
 
-
-// containers.every()
-
-// createP("this text").addClass('text');
 }
 
 
 
- function mouseClicked() {
-	
+ function mouseClicked() {	
+	if(!noInterface) {
 		containers.forEach(function(container){
-			container.checkCellsForClick();	
-			container.updateClick();
+			container.checkClick();	
 			container.display();
-			setTimeout(container.display.bind(container),400);
-				
+			// setTimeout(container.display.bind(container),400);		
 		})
+	};
+		if(solved) {
+				// textSize(90);
+				// textFont('Georgia');
+				// fill(255,165,0);
 
 
- 	// interface.checkPlayButton();
-
-// 	if(playHeadPaused && interface.playButtonClicked) {
-// 		playHeadPaused = false;
-// 		setInterval(movePlayhead,50);
-// 	}
-
-// 	// else if(playHeadPaused) {
-// 	// 			containers.forEach(function(container){
-// 	// 		container.checkCellsForClick();		
-// 	// 		})
-
-// 	// 	containers.forEach(function(container){
-		
-// 	// 		container.updateClick();		
-		
-// 	// 		})
-// 	// }
-
-// 	else if (!playHeadPaused && interface.playButtonClicked) {
-// 		 playHeadPaused = true;	
-// 	}
-
-
-	// if(playHeadPaused) {
-	// 			containers.forEach(function(container){
-	// 		container.checkCellsForClick();		
-	// 		})
-
-	// 	containers.forEach(function(container){
-		
-	// 		container.updateClick();		
-		
-	// 		})
-	// }
-
-
+				// text(solvedObject,80,80,600,1000);
+		}
  }
 
 function mouseDragged() {
+	antiSolveSpell=false;
 // playHeadPaused = true;	
 var meridianKey="Z";
-
+if(!noInterface) {
 background(background_color);
 	strokeWeight(boxHeight);
 	stroke(vertColor);
@@ -257,9 +211,9 @@ background(background_color);
 containers.forEach(function(container,index) {
 	container.checkSolution(currentKey);
 	
-		container.checkClick();
+		container.checkDraggable();
 		if(container.draggable) {
-			// console.log("trig movecells");
+			 console.log("trig movecells");
 			container.move();
 			container.moveCells();
 			container.moveTriangles();
@@ -291,41 +245,51 @@ containers.forEach(function(container,index) {
 	// console.log(solvedArray);
 		if(solvedArray.every(function(el) {
 				return el > 0;
-			}) ) { 
+			}) && !antiSolveSpell) { 
 				console.log("yay")
 				solved=true;
 
 
-				var solvedObject = puzzle1.sounds.filter(function(sound,i,array) {
+				 solvedObject = puzzle1.sounds.filter(function(sound,i,array) {
 					 console.log("solved key" + currentKey)	
 					 console.log(sound.solutionKey);
 					
 						if(sound.solutionKey === currentKey) {
-							console.log("returning" + sound);
-							 console.log(sound.title);
+							// console.log("returning" + sound);
+							//  console.log(sound.title);
 							return sound.title;
 						};
 				})
 				
 
+				// containers.forEach(function(container){
+				// 	container.playSolution();
+				// })	
 				
+				console.log(solvedObject[0].alreadySolved);
+
+				if(!solvedObject[0].alreadySolved) {
+					solvedObject[0].alreadySolved = true;
+				var fullSound = new Howl({ src: solvedObject[0].fullSound });
+				
+				if(!disablePlayback) {
+					fullSound.play();
+					disablePlayback = true;
+					setTimeout(reEnablePlayback, 5000);
+					};
 				solvedObject=JSON.stringify(solvedObject[0].title);
 				// var soundName = Object.keys(solvedObject);
 				// console.log(soundName);
 				// createP(solvedObject).addClass('text');
+				
 
-				textSize(30);
-				fill(255);
-				stroke(255);
-				text(solvedObject,50,900);
-
-				containers.forEach(function(){
-					
-				})
-
+				textView();
 				};
 
-			// solvedArray.every(function(el) {
+
+		};
+
+	};			// solvedArray.every(function(el) {
 			// 	console.log(el);
 			// })
 
@@ -339,6 +303,7 @@ containers.forEach(function(container,index) {
 function mouseReleased() {
 	//playHeadPaused = false;
 	containers.forEach(function(container) {
+		// container.checkMeridian();
 		container.draggable = false;
 	})
 	
@@ -394,8 +359,48 @@ var activeColumn;
 	}
 }
 
+function resetSolution() {
+	solved = false;
+	solvedObject = "";
+	antiSolveSpell=true;
+	// resetView();
+}
+
+function textView() {
+	background(background_color);
+	textSize(70);
+	textFont('Arial');
+	fill(200);
+	// fill(255,165,0);	
+	// strokeWeight(20);
+	// stroke(120);
+	text(solvedObject,200,100,500,1000);
+	// setTimeout(resetSolution,5000);
+	noInterface=true;
+	setTimeout(blankView,4000);
+}
+
+function blankView() {
+	background(background_color);
+	setTimeout(resetSolution,3000);
+	setTimeout(resetView,3000);
+}
 
 
+function resetView() {
+	noInterface = false;
+	background(background_color);
+		containers.forEach(function(container) {
+
+		container.display();
+		
+		})
+}
+
+
+function reEnablePlayback () {
+	disablePlayback = false;
+}
 
 // var sounds = {
 // 	containers: [
