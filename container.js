@@ -8,7 +8,7 @@ var Container = function(x,y,width,height,meridian,color,numCells,sounds) {
 	this.numCells = numCells;
 	this.draggable = false;
 	this.cells=[];
-	
+	this.currentY= y;
 	this.interfaceColor = [200,200,200];
 	this.currentColumn = 0;
 	this.sounds = sounds;
@@ -49,112 +49,6 @@ var Container = function(x,y,width,height,meridian,color,numCells,sounds) {
 				this.cells[i] = new Cell(x, y, width, height, cellSound);
 				 // console.log(this.cells[i]);
 			}
-	},
-
-	this.checkMeridian = function() {
-
-		this.cells.forEach(function(cell,index){
-
-			if((cell.y > (this.meridian-50)) && (cell.y < (this.meridian+40)) && !cell.playing) {
-				// cell.cellColor = [200,0,0];
-				cell.markAsMeridian();
-
-				this.meridianKey = cell.key;
-			}
-			else {
-				cell.onMeridian =false;
-				cell.resetCell();
-
-			}
-			 
-		}, this)	
-		return this.meridianKey
-		
-
-	},
-
-	this.checkSolution = function(key) {
- //console.log(key);
-		this.cells.forEach(function(cell,index){
-
-			if(cell.key === key && cell.onMeridian) {
-
-				cell.markAsSolved();
-				 
-				 this.containerSolved = true;
-				 // console.log(this);
-				 // console.log(this.containerSolved);
-			}
-			else if (cell.key === key && !cell.onMeridian){
-				this.containerSolved = false;
-			}
-			else
-				{
-				 // console.log(cell.key);
-				 // console.log(key);
-				 cell.markUnSolved();
-				 // this.containerSolved = false;
-				 // console.log(this.containerSolved);
-			}
-			
-			// console.log(cell.solved);
-
-		}, this)
-
-
-	if(this.cells.indexOf(
-		function(cell){
-			cell.solved
-		}) != -1) {
-		console.log("whew")
-		};
-
-
-		 // if(this.cells.includes(function(cell) {
-		 // 	cell.solved=true;
-		 // }) ) 
-		 // 	{
-		 // 		this.containerSolved = true; 
-		 // 	}	
-		 // 	else {
-		 // 		this.containerSolved = false;
-		 // 	}
-	
-		 // console.log("inside func outside foreach" + this.containerSolved);
-
-	},
-
-	// this.playSolution = function() {
-	
-	// var solvedSounds=[];
-	
-	// 	// this.cells.filter(function(cell, i , cells){
-			
-	// 	// 	return cells.
-	// 	// })	
-
-	// 	this.cells.forEach(function(cell){
-	// 		if(cell.solved) {
-	// 			solvedSounds.push(cell.sound);
-	// 		}
-	// 	})	
-
-
-	// 	solvedSounds.forEach(function(sound,index){
-	// 			// sound.play();
-	// 		 setTimeout(sound.play.bind(sound),1000*index);
-
-	// 	})
-
-	// },
-
-
-	this.scrambleSounds = function(sounds,keys) {
-		
-			var scrambled  = sounds;
-
-			return scrambled;
-		
 	},
 
 	this.initContainerTriangles = function() {
@@ -198,40 +92,79 @@ var Container = function(x,y,width,height,meridian,color,numCells,sounds) {
 	},
 
 
+	this.checkMeridian = function() {
 
+		this.cells.forEach(function(cell,index){
 
+			if((cell.y > (this.meridian-50)) && (cell.y < (this.meridian+40)) && !cell.playing) {
+				// cell.cellColor = [200,0,0];
+				cell.markAsMeridian();
 
+				this.meridianKey = cell.key;
+			}
+			else {
+				cell.onMeridian =false;
+				cell.resetCell();
 
-	// 	this.checkCellsForClick = function(){
-	// 	var that = this;
+			}
+			 
+		}, this)	
+		return this.meridianKey
+		
 
-
-	// },
-
-
-	this.display = function() {
-			fill(this.interfaceColor);
-			stroke(this.interfaceColor);
-			triangle(this.upperTriangles.a,this.upperTriangles.b,this.upperTriangles.c,this.upperTriangles.d,this.upperTriangles.e,this.upperTriangles.f);
-			triangle(this.lowerTriangles.a,this.lowerTriangles.b,this.lowerTriangles.c,this.lowerTriangles.d,this.lowerTriangles.e,this.lowerTriangles.f);
-			this.cells.forEach(function(cell,index){
-				cell.updateColor();
-				cell.display();
-			}) 		
 	},
+
+	this.checkSolution = function(key) {
+ //console.log(key);
+		this.cells.forEach(function(cell,index){
+
+			if(cell.key === key && cell.onMeridian && !cell.solved) {
+
+				cell.markHighlighted();
+				 
+				 this.containerSolved = true;
+			}
+			else if (cell.key === key && !cell.onMeridian){
+				this.containerSolved = false;
+			}
+			else
+				{
+				 cell.unHighlight();
+			}
+		}, this)
+
+
+		// if(this.cells.indexOf(
+		// 	function(cell){
+		// 		cell.solved
+		// 	}) != -1) {
+		// 	console.log("whew")
+		// 	};
+
+	},
+
+
 
 	this.checkClick = function() {
 		if(this.checkRect(mouseX, mouseY,this._x,this._y,this._width,this._height)) {
 				this.clicked = true;
+
 		}
 		else {
 			 //this.draggable = false;
 		};
 		
 		this.cells.forEach(function(cell,index){
+				console.log("cell clicked");
+				if(cell.playing) {
+						cell.sound.stop();
+						//cell.highlight=false;
+						cell.playing=false
+						// cell.cellColor = cell.startColor;
+						cell.display;
+					}
 				cell.checkClick();
-				// cell.updateColor();
-				// cell.display();
+
 			})
 	},
 
@@ -257,10 +190,40 @@ var Container = function(x,y,width,height,meridian,color,numCells,sounds) {
 		return (mouseX > this._x && mouseX < this._x + this._width && mouseY > this._y && mouseY < this._y + this._height)		
 	},
 
+	this.checkPlayhead = function(x) {
+		var currentColumn;
+		// if (x <40) { currentColumn = 5};
+		// if (x > 30 && x < 145) {currentColumn = 0};
+		// if (x >140 && x < 245) {currentColumn = 1};
+		// if (x >240 && x < 365) {currentColumn = 2};
+		// if (x >360 && x < 450) {currentColumn = 3};
+		// if (x >450 && x < 555) {currentColumn = 4};
+		// if (x >530) {currentColumn = 5};
+		 // console.log(currentColumn);
+		if (x <140) { currentColumn = 5};
+		if (x > 130 && x < 245) {currentColumn = 0};
+		if (x >240 && x < 345) {currentColumn = 1};
+		if (x >340 && x < 465) {currentColumn = 2};
+		if (x >460 && x < 550) {currentColumn = 3};
+		if (x >550 && x < 655) {currentColumn = 4};
+		if (x >630) {currentColumn = 5};
 
-	this.unClick = function() {
-		this.draggable = false;
+
+		return currentColumn;
+		
 	},
+	this.display = function() {
+			fill(this.interfaceColor);
+			stroke(this.interfaceColor);
+			triangle(this.upperTriangles.a,this.upperTriangles.b,this.upperTriangles.c,this.upperTriangles.d,this.upperTriangles.e,this.upperTriangles.f);
+			triangle(this.lowerTriangles.a,this.lowerTriangles.b,this.lowerTriangles.c,this.lowerTriangles.d,this.lowerTriangles.e,this.lowerTriangles.f);
+			this.cells.forEach(function(cell,index){
+				cell.updateColor();
+				cell.display();
+			}) 		
+	},
+
+
 
 	this.moveCells = function() {
 		var that = this;
@@ -272,8 +235,23 @@ var Container = function(x,y,width,height,meridian,color,numCells,sounds) {
 				cell.y = that._y + ((that._height/that.numCells)*index);
 				cell.width = that._width * 1.0;
 				cell.height = that._height/that.numCells;
+				cell.moving=true;
+				cell.sound.stop();
 				 // console.log(cell.y);
 				})
+	},
+
+
+	this.markSolved = function(key) {
+			this.cells.forEach(function(cell,index){
+
+				if(cell.key === key) {
+					console.log('solved');
+					cell.markSolved();
+					
+					
+				};
+			});	
 	},
 
 	this.moveTriangles = function() {
@@ -295,7 +273,7 @@ var Container = function(x,y,width,height,meridian,color,numCells,sounds) {
 	},
 
 	this.move = function() {
-
+		this.currentY=this._y;
 		if(this._y > 0 && this._y < (1000 - this._height)) {
 		this._y = mouseY;
 		this.moveCells();
@@ -303,10 +281,27 @@ var Container = function(x,y,width,height,meridian,color,numCells,sounds) {
 
 		if (this._y < 40) {this._y=40};
 
-		if (this._y > (360)) {this._y = (360 )};
+		if (this._y > 360) {this._y = (360 )};
 		this.settleInGrid();
+		this.cells.forEach(function(cell,index){
+		cell.checkBoundary();
+		});
+	},
+
+	this.scrambleSounds = function(sounds,keys) {
+		
+			var scrambled  = sounds;
+
+			return scrambled;
 		
 	},
+
+	this.resetCellMoving = function() {
+		this.cells.forEach(function(cell){
+			cell.moving=false;
+		})
+	},
+
 
 	this.settleInGrid = function() {
 		// if(this._y > 0 && this._y < 90 ) 	{this._y = 20};
@@ -331,29 +326,10 @@ var Container = function(x,y,width,height,meridian,color,numCells,sounds) {
 		})
 	},
 
-	this.checkPlayhead = function(x) {
-		var currentColumn;
-		// if (x <40) { currentColumn = 5};
-		// if (x > 30 && x < 145) {currentColumn = 0};
-		// if (x >140 && x < 245) {currentColumn = 1};
-		// if (x >240 && x < 365) {currentColumn = 2};
-		// if (x >360 && x < 450) {currentColumn = 3};
-		// if (x >450 && x < 555) {currentColumn = 4};
-		// if (x >530) {currentColumn = 5};
-		 // console.log(currentColumn);
-		if (x <140) { currentColumn = 5};
-		if (x > 130 && x < 245) {currentColumn = 0};
-		if (x >240 && x < 345) {currentColumn = 1};
-		if (x >340 && x < 465) {currentColumn = 2};
-		if (x >460 && x < 550) {currentColumn = 3};
-		if (x >550 && x < 655) {currentColumn = 4};
-		if (x >630) {currentColumn = 5};
 
-
-		return currentColumn;
-		
+	this.unClick = function() {
+		this.draggable = false;
 	}
-
 
 }
 
