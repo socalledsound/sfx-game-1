@@ -1,7 +1,11 @@
 
 var Game = function(options) {	
 	this.clickSound = new Howl({src:options.mainClickSoundPath});
+	this.magicSolvedSound = new Howl({src:options.magicSolvedSoundPath})
 	this.background_color = options.background_color;
+	this.cellStartColor=options.cellStartColor;
+	this.cellMeridianColor = options.cellMeridianColor;
+	this.glowingColor= options.glowingColor;
 	this.solvedTextColor = options.solvedTextColor;
 	this.highlightColor = options.highlightColor;
 	this.solvedColor = options.solvedColor;
@@ -31,12 +35,12 @@ var Game = function(options) {
 
 	this.solvedArray = [0,0,0,0,0];
 	this.solvedText;
-	this.solvedTextSize=60;
+	this.solvedTextSize=20;
 	// this.solvedTextFont='Arial';
-	this.solvedText_x=50;
-	this.solvedText_y=100;
-	this.solvedText_width=600;
-	this.solvedText_height=800;
+	this.solvedText_x=150;
+	this.solvedText_y=365;
+	this.solvedText_width=500;
+	this.solvedText_height=120;
 	this.solved = false;
 	this.antiSolveSpell = false;
 	this.disablePlayback = false;
@@ -54,6 +58,8 @@ var Game = function(options) {
 
 	stroke(30,100,100);
 	background(this.background_color);
+	this.drawMeridianMarker();
+
 		 puzzleData.sounds.forEach(function(sound){
 			 this.container1sounds.push(sound.clips[0]);
 			 this.container2sounds.push(sound.clips[1]);
@@ -71,6 +77,8 @@ var Game = function(options) {
 		container.initCells();
 		container.initContainerTriangles();
 		meridianKey = container.checkMeridian();
+		container.display();
+
 		if (index<1) {
 				this.currentKey = meridianKey;
 			};
@@ -83,7 +91,7 @@ var Game = function(options) {
 
 	this.clicked = function() {
 	if(!this.stopEverythingForText) {
-		console.log("wy ois this clicking");
+		
 		this.containers.forEach(function(container){
 			container.checkClick();	
 			container.display();
@@ -102,13 +110,20 @@ var Game = function(options) {
 
 
 	this.drawGame = function() {
-		this.drawPlayMarker();
+		// this.drawPlayMarker();
+		this.drawMeridianMarker();
 	},
 
 	this.drawPlayMarker = function() {
 		fill(this.highlightColor);
-		strokeWeight(3);
-	 	line(0,400,100,400);
+		rect(50,360,100,35);
+		// strokeWeight(3);
+	 // 	line(0,400,100,400);
+	},
+
+	this.drawMeridianMarker = function() {
+		fill(this.highlightColor);
+		rect(10,370,120,60);
 	},
 
 
@@ -125,6 +140,7 @@ var Game = function(options) {
 		if(!this.noInterface) {
 
 			 background(this.background_color);
+			 this.drawMeridianMarker();
 			// strokeWeight(boxHeight);
 			// stroke(vertColor);
 			// // line(0,playMeridian,width,playMeridian);
@@ -132,8 +148,8 @@ var Game = function(options) {
 			// stroke(30,100,100);
 
 		this.containers.forEach(function(container,index) {
-			container.checkSolution(this.currentKey);
-			
+				container.checkSolution(this.currentKey);
+				// container.checkMeridian();
 				container.checkDraggable();
 				if(container.draggable) {
 					 // console.log("trig movecells");
@@ -149,6 +165,7 @@ var Game = function(options) {
 					// console.log(currentKey);
 					container.checkSolution(this.currentKey);
 				};	
+					// container.checkSolution(this.currentKey);
 					container.display();
 					  // console.log("is container solved?" + container.containerSolved);
 					// container.startColor();
@@ -165,12 +182,13 @@ var Game = function(options) {
 			},this);
 		this.checkEvery();
 		};
+		
 	},
 
 	this.onSolved = function () {
 
 		this.solved=true;
-
+		this.solvedArray=[];
 
 			 var solvedObject = puzzleData.sounds.filter(function(sound,i,array) {
 				 // console.log("solved key" + currentKey)	
@@ -192,13 +210,9 @@ var Game = function(options) {
 
 			if(!solvedObject[0].alreadySolved) {
 				solvedObject[0].alreadySolved = true;
-			var fullSound = new Howl({ src: solvedObject[0].fullSound });
+			this.fullSolvedSound = new Howl({ src: solvedObject[0].fullSound });
 			
-			if(!this.disablePlayback) {
-				fullSound.play();
-				this.disablePlayback = true;
-				setTimeout(reEnablePlayback, 30000);
-				};
+
 			solvedObject=JSON.stringify(solvedObject[0].title);
 			this.solvedText=solvedObject;
 			// var soundName = Object.keys(solvedObject);
@@ -206,7 +220,8 @@ var Game = function(options) {
 			// createP(solvedObject).addClass('text');
 			console.log(this);
 			// setTimeout(this.solvedAnimation.bind(this),500);
-			this.solvedAnimation();
+			this.solvedAnimationGlowing()
+			
 			// textView();
 			};
 
@@ -239,11 +254,12 @@ var Game = function(options) {
 
 	this.resetInterface = function() {
 		background(this.background_color);
+		this.drawMeridianMarker();
 		this.stopEverythingForText=false;
 		this.disablePlayback=false;
 		if(!this.textIsShowing) {
 		this.containers.forEach(function(container){
-			// container.checkClick();	
+			container.checkClick();	
 			container.display();
 			// setTimeout(container.display.bind(container),400);		
 			})
@@ -259,18 +275,42 @@ var Game = function(options) {
 	// resetView();
 	},
 
-	this.solvedAnimation = function() {
+
+this.solvedAnimationGlowing = function() {
+	// this.disablePlayback=true;
+	this.containers.forEach(function(container){
+			container.markGlowing(this.currentKey);	
+			container.display();
+			 //setTimeout(container.display.bind(container),400);		
+		}, this)
+
+
+
+	this.magicSolvedSound.play();
+	setTimeout(this.solvedAnimationGrey.bind(this),1000);
+
+	
+}
+
+
+	this.solvedAnimationGrey = function() {
 		this.containers.forEach(function(container){
+			
 			container.markSolved(this.currentKey);	
 			container.display();
 			 //setTimeout(container.display.bind(container),400);		
 		}, this)
-		setTimeout(this.showText.bind(this),500);
+		setTimeout(this.showText.bind(this),1000);
 	},
 
 
 	this.showText = function () {
-		// this.noInterface=true;
+
+					if(!this.disablePlayback) {
+				this.fullSolvedSound.play();
+				this.disablePlayback = true;
+				setTimeout(reEnablePlayback, 30000);
+				};
 		this.stopEverythingForText=true;
 
 		this.animateText = setInterval(this.textAnimation,200);
@@ -283,7 +323,7 @@ var Game = function(options) {
 
 	this.textAnimation = function () {
 		
-		background(this.background_color);
+		// background(this.background_color);
 		textSize(this.solvedTextSize);
 		textFont('Sans');
 		fill(this.solvedTextColor);

@@ -1,17 +1,18 @@
-var Cell = function(x, y, width, height,sound) {
+var Cell = function(x, y, width, height,color,sound) {
 	this.x 			= 	x;
 	this.y 			= 	y;
 	this.width 		=	width;
 	this.height 	= 	height;
-	
-	this.cellStartColor = [2,12,51];
+	this.cellColor = color;
+	this.cellStartColor = color;
 	this.highlightColor = game.highlightColor;
-	this.cellMeridianColor = [10,10,80];
+	this.cellMeridianColor = game.cellMeridianColor;
 	this.soundPlayingColor =  [180,180,120];
+	this.glowingColor=game.glowingColor;
 	this.solvedColor =	game.solvedColor; 		
 
-	this.cellColor = this.cellStartColor;
 	
+	this.oldColor = color;
 	
 	 this.key 		= 	Object.keys(sound);
 	this.sound		=	new Howl({src:[sound[this.key]]});
@@ -45,6 +46,7 @@ var Cell = function(x, y, width, height,sound) {
 		if( mouseX > this.x && mouseX < this.x +80 && mouseY > this.y && mouseY < this.y +80) {
 				this.clicked = true;
 				if(this.clicked && !this.playing && !game.disablePlayback && !this.solved && !this.moving) {
+
 				 this.trigSoundAnimation();						
 				}
 		}	
@@ -71,44 +73,61 @@ var Cell = function(x, y, width, height,sound) {
 	}
 
 	this.updateColor = function() {		
-		if(!this.solved) {
-			if(!this.clicked) {	
 
-				if (this.highlight&& !this.solved) {
-					this.cellColor = this.highlightColor;
-				}
-				// else if (this.onMeridian) {
-				// 	this.cellColor = this.cellMeridianColor;
-				// }
-				else if (this.solved) {
-					this.cellColor = this.solvedColor;
-				}
-				else {
-					this.cellColor = this.cellStartColor;
-				}
-			}
-			else {
-				 this.cellColor = this.soundPlayingColor;
-			}
-		}	
+		// this.cellColor=this.cellColor;
+		// if(!this.solved) {
+		// 	if(!this.clicked) {	
+
+		// 		if (this.highlight&& !this.solved) {
+		// 			this.cellColor = this.highlightColor;
+		// 		}
+		// 		// else if (this.onMeridian) {
+		// 		// 	this.cellColor = this.cellMeridianColor;
+		// 		// }
+		// 		else if (this.solved) {
+		// 			this.cellColor = this.solvedColor;
+		// 		}
+		// 		else {
+		// 			this.cellColor = this.cellStartColor;
+		// 		}
+		// 	}
+		// 	else {
+		// 		 this.cellColor = this.soundPlayingColor;
+		// 	}
+		// }	
 	},
 
 
 	this.display = function() {
 		// console.log(this.cellColor);
 		this.visible === true ? strokeWeight(0.5) : strokeWeight(0.0);	
-		if (this.solved===true) {console.log(this.cellColor)};
+		// if (this.solved===true) {console.log(this.cellColor)};
+		// if(this.cellColor===undefined) { this.cell}
+		console.log(this.cellColor);
+
 		fill(this.cellColor);		
 		rect(this.x-5,this.y,this.width,this.height);
 	},
 
 	this.markAsMeridian = function() {
 		this.onMeridian = true;
+		if(!this.solved) {
+		this.cellColor= this.cellMeridianColor;
+	}
+	},
+
+	this.markUnMeridian = function() {
+		this.onMeridian = false;
+		if(!this.solved) {
+			this.cellColor= this.cellStartColor;
+		}
+		
 	},
 
 	this.markHighlighted = function() {
 		if(!this.solved) {
 		this.highlight = true;
+		this.cellColor=this.highlightColor;
 		}
 	},
 
@@ -118,20 +137,45 @@ var Cell = function(x, y, width, height,sound) {
 
 	this.markSolved = function() {
 		console.log('cellsolved');
+		// this.glowing=false;
 		this.solved = true;
-		this.visible=false;
+		// this.visible=false;
+		// this.height=this.height-10;
+		// this.y = this.y + 5;
 		this.cellColor = this.solvedColor;
 	},
+
+	this.markGlowing = function() {
+		this.glowing = true;
+		// this.visible=false;
+		this.height=this.height+10;
+		this.y = this.y - 5;
+		this.cellColor = this.glowingColor;
+	},
+
+	this.markUnGlowing = function() {
+		this.glowing = false;
+		if(this.solved) {
+			this.cellColor=this.solvedColor
+		}
+		else {
+			this.cellColor=this.cellStartColor;
+		}
+		
+		// this.visible=false;
+		this.height=this.height-10;
+		this.y = this.y + 5;
+		// this.cellColor = this.cellStartColor;
+	},
+
 
 	this.markUnSolved = function() {
 		this.solved = false;
 	},
 
 	this.resetCell = function() {
-		// this.solved = false;
-		// this.playing =false;
 		this.clicked = false;
-		this.updateColor();
+		this.cellColor = this.oldColor;
 		this.display();
 
 	},
@@ -145,13 +189,13 @@ var Cell = function(x, y, width, height,sound) {
 
 
 	this.startBlink = function() {
-		console.log('startBlink');
+	
 		// var blinkTrig = setInterval(this.blinkCellColor.bind(this),100);
 		// clearInterval(blinkTrig,2000)
 	},
 
 	this.blinkCellColor = function(trig) {
-			console.log('hi');
+			
 			this.cellColor=this.cellStartColor;
 			// this.trig===1 ? this.cellColor = this.soundPlayingColor : this.cellColor = this.cellStartColor;
 			// this.display();
@@ -162,7 +206,10 @@ var Cell = function(x, y, width, height,sound) {
 	},
 
 	this.trigSoundAnimation = function(){
-		this.startBlink();	
+		this.oldColor = this.cellColor;
+		
+		this.cellColor = this.soundPlayingColor;
+		// this.startBlink();	
 		// this.playing=true;
 		 this.playSound();
 		setTimeout(this.resetCell.bind(this),300);

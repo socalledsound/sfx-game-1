@@ -38,15 +38,15 @@ var Container = function(x,y,width,height,meridian,color,numCells,sounds) {
 				var y= this._y + ((this._height/this.numCells)*i);
 				var width = this._width * 1.0;
 				var height = this._height/this.numCells;
-				
-				
+				var color = game.cellStartColor;
+				console.log(color);
 				// this.scrambledSounds=this.scrambleSounds(this.sounds,keys);
 				// var cellSounds = this.sounds;
 				var cellSound = this.sounds[scrambledOrder[i]];
 				// var cellKey = this.scrambledKeys[i].charAt(0);
 				 // console.log(cellSound);
 				// var sound = new Howl({src:[this.sound] });
-				this.cells[i] = new Cell(x, y, width, height, cellSound);
+				this.cells[i] = new Cell(x, y, width, height, color, cellSound);
 				 // console.log(this.cells[i]);
 			}
 	},
@@ -96,17 +96,22 @@ var Container = function(x,y,width,height,meridian,color,numCells,sounds) {
 
 		this.cells.forEach(function(cell,index){
 
-			if((cell.y > (this.meridian-50)) && (cell.y < (this.meridian+40)) && !cell.playing) {
-				// cell.cellColor = [200,0,0];
-				cell.markAsMeridian();
+			if(!cell.solved) {
 
-				this.meridianKey = cell.key;
-			}
-			else {
-				cell.onMeridian =false;
-				cell.resetCell();
+					if((cell.y > (this.meridian-50)) && (cell.y < (this.meridian+40)) && !cell.playing) {
+						// cell.cellColor = [200,0,0];
+						cell.markAsMeridian();
 
-			}
+						this.meridianKey = cell.key;
+					}
+					else {
+						// cell.onMeridian =false;
+						// cell.unHighlight();
+						//   cell.resetCell();
+						cell.markUnMeridian();
+
+					}
+				}	
 			 
 		}, this)	
 		return this.meridianKey
@@ -116,22 +121,37 @@ var Container = function(x,y,width,height,meridian,color,numCells,sounds) {
 
 	this.checkSolution = function(key) {
  //console.log(key);
-		this.cells.forEach(function(cell,index){
 
-			if(cell.key === key && cell.onMeridian && !cell.solved) {
+			this.cells.forEach(function(cell,index){
+				
+				if(!cell.solved) {
 
-				cell.markHighlighted();
-				 
-				 this.containerSolved = true;
-			}
-			else if (cell.key === key && !cell.onMeridian){
-				this.containerSolved = false;
-			}
-			else
-				{
-				 cell.unHighlight();
-			}
-		}, this)
+
+						if(cell.key != key && !cell.onMeridian) {
+							cell.resetCell();
+							 cell.unHighlight();
+						}
+
+						if(cell.key === key && cell.onMeridian && !cell.solved) {
+
+							cell.markHighlighted();
+							 
+							 this.containerSolved = true;
+						}
+						else if (cell.key === key && !cell.onMeridian){
+							this.containerSolved = false;
+							cell.unHighlight();
+						}
+						else
+							{
+								
+								 cell.resetCell();
+								 cell.unHighlight();
+								
+							 	
+						}
+				}		
+			}, this)
 
 
 		// if(this.cells.indexOf(
@@ -218,7 +238,7 @@ var Container = function(x,y,width,height,meridian,color,numCells,sounds) {
 			triangle(this.upperTriangles.a,this.upperTriangles.b,this.upperTriangles.c,this.upperTriangles.d,this.upperTriangles.e,this.upperTriangles.f);
 			triangle(this.lowerTriangles.a,this.lowerTriangles.b,this.lowerTriangles.c,this.lowerTriangles.d,this.lowerTriangles.e,this.lowerTriangles.f);
 			this.cells.forEach(function(cell,index){
-				cell.updateColor();
+				// cell.updateColor();
 				cell.display();
 			}) 		
 	},
@@ -244,13 +264,20 @@ var Container = function(x,y,width,height,meridian,color,numCells,sounds) {
 
 	this.markSolved = function(key) {
 			this.cells.forEach(function(cell,index){
-
+				cell.markUnGlowing();
 				if(cell.key === key) {
-					console.log('solved');
-					cell.markSolved();
-					
-					
+
+					cell.markSolved();				
 				};
+			});	
+	},
+
+	this.markGlowing = function(key) {
+			this.cells.forEach(function(cell,index){
+				if(cell.key===key) {
+					cell.markGlowing();				
+				}
+				
 			});	
 	},
 
