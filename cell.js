@@ -53,8 +53,7 @@ var Cell = function(x, y, width, height,color,sound) {
 	},
 
 	this.checkBoundary = function() {
-			// console.log(playMeridian);
-			// console.log(this.y);
+
 			if (this.y >350 && this.y <370 && !this.clickPlaying) {
 				game.playClick();
 				this.clickPlaying=true;
@@ -99,12 +98,8 @@ var Cell = function(x, y, width, height,color,sound) {
 
 
 	this.display = function() {
-		// console.log(this.cellColor);
-		this.visible === true ? strokeWeight(0.5) : strokeWeight(0.0);	
-		// if (this.solved===true) {console.log(this.cellColor)};
-		// if(this.cellColor===undefined) { this.cell}
-		console.log(this.cellColor);
 
+		this.visible === true ? strokeWeight(0.5) : strokeWeight(0.0);	
 		fill(this.cellColor);		
 		rect(this.x-5,this.y,this.width,this.height);
 	},
@@ -133,23 +128,17 @@ var Cell = function(x, y, width, height,color,sound) {
 
 	this.unHighlight = function() {
 		this.highlight = false;
+		this.cellColor=this.cellStartColor;
 	},	
 
 	this.markSolved = function() {
-		console.log('cellsolved');
-		// this.glowing=false;
 		this.solved = true;
-		// this.visible=false;
-		// this.height=this.height-10;
-		// this.y = this.y + 5;
+		this.visible=false;
 		this.cellColor = this.solvedColor;
 	},
 
 	this.markGlowing = function() {
 		this.glowing = true;
-		// this.visible=false;
-		this.height=this.height+10;
-		this.y = this.y - 5;
 		this.cellColor = this.glowingColor;
 	},
 
@@ -161,11 +150,7 @@ var Cell = function(x, y, width, height,color,sound) {
 		else {
 			this.cellColor=this.cellStartColor;
 		}
-		
-		// this.visible=false;
-		this.height=this.height-10;
-		this.y = this.y + 5;
-		// this.cellColor = this.cellStartColor;
+
 	},
 
 
@@ -174,6 +159,7 @@ var Cell = function(x, y, width, height,color,sound) {
 	},
 
 	this.resetCell = function() {
+		this.height=80;
 		this.clicked = false;
 		this.cellColor = this.oldColor;
 		this.display();

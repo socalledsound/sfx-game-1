@@ -38,7 +38,8 @@ var Game = function(options) {
 	this.solvedTextSize=20;
 	// this.solvedTextFont='Arial';
 	this.solvedText_x=150;
-	this.solvedText_y=365;
+	this.solvedText_y=365
+	;
 	this.solvedText_width=500;
 	this.solvedText_height=120;
 	this.solved = false;
@@ -122,8 +123,10 @@ var Game = function(options) {
 	},
 
 	this.drawMeridianMarker = function() {
+		stroke(this.interfaceColor);
+		strokeWeight(3);
 		fill(this.highlightColor);
-		rect(10,370,120,60);
+		rect(60,395,60,10);
 	},
 
 
@@ -134,42 +137,32 @@ var Game = function(options) {
 	this.dragged = function() {
 
 		this.antiSolveSpell=false;
-		// playHeadPaused = true;	
-		var
-		 meridianKey="Z";
+	
+		var meridianKey="Z";
 		if(!this.noInterface) {
 
-			 background(this.background_color);
-			 this.drawMeridianMarker();
-			// strokeWeight(boxHeight);
-			// stroke(vertColor);
-			// // line(0,playMeridian,width,playMeridian);
-			// strokeWeight(3);
-			// stroke(30,100,100);
+			background(this.background_color);
+			this.drawMeridianMarker();
 
-		this.containers.forEach(function(container,index) {
+			this.containers.forEach(function(container,index) {
 				container.checkSolution(this.currentKey);
-				// container.checkMeridian();
 				container.checkDraggable();
 				if(container.draggable) {
-					 // console.log("trig movecells");
 					container.move();
 					container.moveCells();
 					container.moveTriangles();
 					meridianKey = container.checkMeridian();
-					  // console.log(index);
+
 					if (index<1) {
 						this.currentKey = meridianKey;
-						// container.containerSolved;
+
 					};
-					// console.log(currentKey);
+
 					container.checkSolution(this.currentKey);
 				};	
-					// container.checkSolution(this.currentKey);
+
 					container.display();
-					  // console.log("is container solved?" + container.containerSolved);
-					// container.startColor();
-					// console.log(container.containerSolved);
+
 					if(container.containerSolved) {
 						this.solvedArray[index] = 1;
 					}
@@ -187,8 +180,7 @@ var Game = function(options) {
 
 	this.onSolved = function () {
 
-		this.solved=true;
-		this.solvedArray=[];
+
 
 			 var solvedObject = puzzleData.sounds.filter(function(sound,i,array) {
 				 // console.log("solved key" + currentKey)	
@@ -223,6 +215,8 @@ var Game = function(options) {
 			this.solvedAnimationGlowing()
 			
 			// textView();
+		
+
 			};
 
 
@@ -230,10 +224,12 @@ var Game = function(options) {
 
 
 	this.checkEvery = function() {
+		 // console.log(this.solvedArray);
 		if(this.solvedArray.every(function(el) {
 				return el > 0;
 			}) && !this.antiSolveSpell) { 
-			
+			console.log("every is solved");
+			console.log(this.solvedArray);
 			setTimeout(this.onSolved.bind(this),500);
 
 		};
@@ -259,25 +255,35 @@ var Game = function(options) {
 		this.disablePlayback=false;
 		if(!this.textIsShowing) {
 		this.containers.forEach(function(container){
-			container.checkClick();	
+			// container.checkClick();	
 			container.display();
 			// setTimeout(container.display.bind(container),400);		
 			})
 		}
-
+		this.resetSolution();
 
 	}
 
 	this.resetSolution = function() {
 		this.solved = false;
 		this.solvedObject = "";
-		this.antiSolveSpell=true;
-	// resetView();
+		this.antiSolveSpell=false;
+		this.currentKey = "Z";
+		this.solvedArray=[0,0,0,0,0];
+
+		this.containers.forEach(function(container){
+			container.containerSolved=false;
+		}, this)
+
+
 	},
 
 
 this.solvedAnimationGlowing = function() {
 	// this.disablePlayback=true;
+
+	
+
 	this.containers.forEach(function(container){
 			container.markGlowing(this.currentKey);	
 			container.display();
@@ -288,6 +294,7 @@ this.solvedAnimationGlowing = function() {
 
 	this.magicSolvedSound.play();
 	setTimeout(this.solvedAnimationGrey.bind(this),1000);
+
 
 	
 }
@@ -313,7 +320,7 @@ this.solvedAnimationGlowing = function() {
 				};
 		this.stopEverythingForText=true;
 
-		this.animateText = setInterval(this.textAnimation,200);
+		this.animateText = setInterval(this.textAnimation,100);
 
 		
 
@@ -331,13 +338,22 @@ this.solvedAnimationGlowing = function() {
 		text(this.solvedText.substring(0,this.curIndex+1),this.solvedText_x,this.solvedText_y,this.solvedText_width,this.solvedText_height);
 		this.curIndex++;
 		if (this.curIndex > this.solvedText.length) {
-			console.log('trig end');
-			clearInterval(this.animateText);
-			setTimeout(this.resetInterface.bind(this),3000);
+
+			setTimeout(this.cleanup,5000);
+			this.fullSolvedSound.fade(1.0,0.0,6000);
 			this.curIndex=0;
 		}
 	}
 
+
+	this.cleanup = function() {
+	
+		clearInterval(this.animateText);
+		this.resetInterface();
+		
+	}
+
+	this.cleanup = this.cleanup.bind(this);	
 	this.textAnimation = this.textAnimation.bind(this);
 // function textView() {
 // 	background(background_color);

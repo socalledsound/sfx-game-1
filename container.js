@@ -39,7 +39,6 @@ var Container = function(x,y,width,height,meridian,color,numCells,sounds) {
 				var width = this._width * 1.0;
 				var height = this._height/this.numCells;
 				var color = game.cellStartColor;
-				console.log(color);
 				// this.scrambledSounds=this.scrambleSounds(this.sounds,keys);
 				// var cellSounds = this.sounds;
 				var cellSound = this.sounds[scrambledOrder[i]];
