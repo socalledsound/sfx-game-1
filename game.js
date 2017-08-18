@@ -51,62 +51,66 @@ var Game = function(options) {
 	this.curIndex=0;
 	
 
-	this.init = function() {
-	
-	// 
-
+	this.initGame = function() {
 		
 
-	stroke(30,100,100);
-	background(this.background_color);
-	this.drawMeridianMarker();
-
-		 puzzleData.sounds.forEach(function(sound){
-			 this.container1sounds.push(sound.clips[0]);
-			 this.container2sounds.push(sound.clips[1]);
-			 this.container3sounds.push(sound.clips[2]);
-			 this.container4sounds.push(sound.clips[3]);
-			 this.container5sounds.push(sound.clips[4]);
-		}, this);
-
-	
-	for (var i = 0; i < this.numContainers; i++) {
-		this.containers[i] = new Container(this.xStart+(i*100),this.yStart,100,400,this.meridian,[30,100,100],5,this.containerSounds[i]);
-	}
-
-	this.containers.forEach(function(container,index){
-		container.initCells();
-		container.initContainerTriangles();
-		meridianKey = container.checkMeridian();
-		container.display();
-
-		if (index<1) {
-				this.currentKey = meridianKey;
-			};
-		container.checkSolution(this.currentKey);
-		container.display();
-	},this);
-
+		this.loadPuzzleSounds();
+		this.initInterface();
+		this.initContainers();
 
 	},
 
-	this.clicked = function() {
-	if(!this.stopEverythingForText) {
-		
-		this.containers.forEach(function(container){
-			container.checkClick();	
+
+	this.loadPuzzleSounds = function() {
+
+			puzzleData.sounds.forEach(function(sound){
+				 this.container1sounds.push(sound.clips[0]);
+				 this.container2sounds.push(sound.clips[1]);
+				 this.container3sounds.push(sound.clips[2]);
+				 this.container4sounds.push(sound.clips[3]);
+				 this.container5sounds.push(sound.clips[4]);
+			}, this);
+	}
+
+	this.initInterface = function () {
+		stroke(30,100,100);
+		background(this.background_color);
+		this.drawMeridianMarker();
+		this.rules = new Rules(options.rulesX,options.rulesY,options.rulesHeight,options.rulesWidth,options.rulesBGcolor,options.rulesTextColor);
+		this.rules.initRules();
+	}
+
+
+	this.initContainers = function() {
+		for (var i = 0; i < this.numContainers; i++) {
+			this.containers[i] = new Container(this.xStart+(i*100),this.yStart,100,400,this.meridian,[30,100,100],5,this.containerSounds[i]);
+		}
+
+		this.containers.forEach(function(container,index){
+			container.initCells();
+			container.initContainerTriangles();
+			meridianKey = container.checkMeridian();
 			container.display();
-			// setTimeout(container.display.bind(container),400);		
-		})
-	};
-		// if(this.solved) {
-		// 		textSize(90);
-		// 		textFont('Georgia');
-		// 		fill(255,165,0);
+
+			if (index<1) {
+					this.currentKey = meridianKey;
+				};
+			container.checkSolution(this.currentKey);
+			container.display();
+		},this);
+	}
 
 
-		// 		text(solvedObject,80,80,600,1000);
-		// }
+	this.clicked = function() {
+		if(!this.stopEverythingForText) {
+			
+			this.containers.forEach(function(container){
+				container.checkClick();	
+				container.display();
+						
+			})
+		};
+
 	},
 
 

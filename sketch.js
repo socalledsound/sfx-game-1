@@ -8,9 +8,9 @@ var solvedFont;
 
 function setup() {
 	solvedFont = loadFont("fonts/Lato-Black.ttf");
-	createCanvas(1000,1000);
+	createCanvas(1200,1000);
 	game = new Game(gameOptions);
-	game.init();
+	game.initGame();
 };
 
  function mousePressed() {	
