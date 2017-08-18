@@ -101,6 +101,25 @@ var Game = function(options) {
 	}
 
 
+	this.drawInterface = function() {
+
+		stroke(30,100,100);
+		background(this.background_color);
+		this.drawMeridianMarker();
+
+	}
+
+	this.drawContainers = function () {
+
+	}
+
+	this.drawGame = function() {
+		// this.drawPlayMarker();
+		this.drawInterface();
+		this.drawContainers();
+	},
+
+
 	this.clicked = function() {
 		if(!this.stopEverythingForText) {
 			
@@ -114,10 +133,7 @@ var Game = function(options) {
 	},
 
 
-	this.drawGame = function() {
-		// this.drawPlayMarker();
-		this.drawMeridianMarker();
-	},
+
 
 	this.drawPlayMarker = function() {
 		fill(this.highlightColor);
@@ -145,16 +161,20 @@ var Game = function(options) {
 		var meridianKey="Z";
 		if(!this.noInterface) {
 
-			background(this.background_color);
-			this.drawMeridianMarker();
+			
+			this.drawInterface();
 
 			this.containers.forEach(function(container,index) {
+
 				container.checkSolution(this.currentKey);
+
 				container.checkDraggable();
 				if(container.draggable) {
 					container.move();
 					container.moveCells();
 					container.moveTriangles();
+
+
 					meridianKey = container.checkMeridian();
 
 					if (index<1) {
@@ -162,11 +182,11 @@ var Game = function(options) {
 
 					};
 
-					container.checkSolution(this.currentKey);
+					
 				};	
-
+					container.checkSolution(this.currentKey);
 					container.display();
-
+					
 					if(container.containerSolved) {
 						this.solvedArray[index] = 1;
 					}
@@ -232,8 +252,6 @@ var Game = function(options) {
 		if(this.solvedArray.every(function(el) {
 				return el > 0;
 			}) && !this.antiSolveSpell) { 
-			console.log("every is solved");
-			console.log(this.solvedArray);
 			setTimeout(this.onSolved.bind(this),500);
 
 		};
