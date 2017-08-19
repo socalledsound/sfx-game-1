@@ -19,7 +19,7 @@ var Cell = function(x, y, width, height,color,sound) {
 	this.oldColor = color;
 	
 	 this.key 		= 	Object.keys(sound);
-	this.sound		=	new Howl({src:[sound[this.key]]});
+	this.sound		=	new Howl({src:[sound[this.key]],html5: false});
 
 
 	this.key 		= 	Object.keys(sound)[0].charAt(0);
