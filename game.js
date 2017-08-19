@@ -1,6 +1,6 @@
 
 var Game = function(options) {	
-	this.clickSound = new Howl({src:options.mainClickSoundPath});
+	this.clickSound = new Howl({src:options.mainClickSoundPath,html5: false});
 	this.magicSolvedSound = new Howl({src:options.magicSolvedSoundPath})
 	this.background_color = options.background_color;
 	this.cellStartColor=options.cellStartColor;
