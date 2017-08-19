@@ -19,7 +19,7 @@ var gameOptions = {
 	numContainers:5,
 	width: 1000,
 	height: 1000,
-	xStart:50,
+	xStart:80,
 	yStart:200,
 	meridian:400,
 	boxHeight:80,
