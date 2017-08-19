@@ -146,7 +146,7 @@ var Game = function(options) {
 		stroke(this.interfaceColor);
 		strokeWeight(3);
 		fill(this.highlightColor);
-		rect(60,395,60,10);
+		rect(10,395,30,10);
 	},
 
 
