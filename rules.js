@@ -10,6 +10,14 @@
 //now try to find a box in each column that matches that sound and line them all up on the solution line to solve a sound and see what it's called.
 //solve all five sounds to move to the next level!!
 
+				// "good"
+				// "There are five sounds split up into five fragments each."
+				// "One fragment of each sound is in each vertical column."
+				// "Got it?"
+				// "yes" "not really"
+
+
+
 var Rules = function(x,y,width,height,bgColor,textColor) {
 	this.x = x;
 	this.y = y;
@@ -18,19 +26,13 @@ var Rules = function(x,y,width,height,bgColor,textColor) {
 	this.rulesBGcolor = bgColor;
 	this.textColor = textColor;
 	this.rule1 = "Click on any box to hear a fragment of sound";
-				// "good"
-				// "There are five sounds split up into five fragments each."
-				// "One fragment of each sound is in each vertical column."
-				// "Got it?"
-				// "yes" "not really"
-
-	this.rule2 = "Move boxes vertically by";
-	this.rule3 = "clicking and dragging";
-	this.rule4 = "Line up five similar sounds along"; 
-	this.rule5 = "the middle band to find out what";
-	this.rule6 = "that sound is called";
-	this.rule7 = "'Solve' all five sounds to go";
-	this.rule8 = "to the next level";
+	this.rule2 = "Move boxes vertically by clicking and dragging";
+	this.rule3 = "";
+	this.rule4 = "Line up five similar sounds along the middle band"; 
+	this.rule5 = "to find out what that sound is called";
+	this.rule6 = "";
+	this.rule7 = "'Solve' all five sounds to go to the next level";
+	this.rule8 = "";
 	this.rule9 = "(more levels coming soon)";
 	this.fontSize = 22;
 
@@ -49,14 +51,14 @@ var Rules = function(x,y,width,height,bgColor,textColor) {
 		text(this.rule2,this.x+20,this.y+80,this.width,this.height);
 		text(this.rule3,this.x+20,this.y+110,this.width,this.height);
 
-		text(this.rule4,this.x+20,this.y+170,this.width,this.height);
-		text(this.rule5,this.x+20,this.y+200,this.width,this.height);
+		text(this.rule4,this.x+20,this.y+130,this.width,this.height);
+		text(this.rule5,this.x+20,this.y+160,this.width,this.height);
 		text(this.rule6,this.x+20,this.y+230,this.width,this.height);
 
-		text(this.rule7,this.x+20,this.y+300,this.width,this.height);
+		text(this.rule7,this.x+20,this.y+220,this.width,this.height);
 		text(this.rule8,this.x+20,this.y+330,this.width,this.height);
 
-		text(this.rule9,this.x+20,this.y+360,this.width,this.height);
+		text(this.rule9,this.x+20,this.y+280,this.width,this.height);
 
 		
 	}
