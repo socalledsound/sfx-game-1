@@ -17,7 +17,7 @@ const puzzleData = {
 	},
 	{
 		title: "FOREST AMBIENCE, AFTERNOON, MULTIPLE WOODPECKERS JAM, WOODLAND AMBIENCE WITH STREAM AND SMALL BIRDS IN BG",
-		fullSound: "sounds/woodpeckers/woodpeckers-full.mp3",
+		fullSound: "sounds/woodpeckers/woodpeckers-full-use.mp3",
 		solutionKey:"B",
 		alreadySolved: false,
 		clips: [
