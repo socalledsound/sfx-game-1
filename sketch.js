@@ -1,6 +1,8 @@
 var game;
 var solvedFont;
-
+   var canvas;
+      var canvasWidth;
+      var ctx;
 
 document.addEventListener('touchstart', this.touchstart);
 document.addEventListener('touchmove', this.touchmove);
@@ -15,16 +17,49 @@ function touchmove(e) {
 
 
 
+
+
+
+
 // function preload() {
 
 // }
 
+
+
+      // function initCanvasListener() {
+      //   canvas = document.getElementById('canvas');
+      //   if (canvas.getContext) {
+      //     ctx = canvas.getContext("2d");
+ 
+      //     window.addEventListener('resize', resizeCanvas, false);
+      //     window.addEventListener('orientationchange', resizeCanvas, false);
+      //     resizeCanvas();
+      //   }
+      // }
+ 
+      // function resizeCanvas() {
+      //   canvas.width = window.innerWidth;
+      //   canvas.height = window.innerHeight;
+      // }
+
+
 function setup() {
 	solvedFont = loadFont("fonts/Lato-Black.ttf");
-	createCanvas(680,1050);
+	createCanvas(windowWidth,windowHeight);
 	game = new Game(gameOptions);
 	game.initGame();
+// initCanvasListener();
+
+
+ 
+
 };
+
+
+
+
+
 
  function mousePressed() {	
  	// console.log(game.textIsShowing);
