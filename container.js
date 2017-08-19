@@ -166,6 +166,7 @@ var Container = function(x,y,width,height,meridian,color,numCells,sounds) {
 
 	this.checkClick = function() {
 		if(this.checkRect(mouseX, mouseY,this._x,this._y,this._width,this._height)) {
+
 				this.clicked = true;
 
 		}
@@ -174,7 +175,7 @@ var Container = function(x,y,width,height,meridian,color,numCells,sounds) {
 		};
 		
 		this.cells.forEach(function(cell,index){
-				console.log("cell clicked");
+				// console.log("cell clicked");
 				if(cell.playing) {
 						cell.sound.stop();						
 						cell.playing=false						
@@ -189,16 +190,9 @@ var Container = function(x,y,width,height,meridian,color,numCells,sounds) {
 		this.checkDraggable = function() {
 		if(this.checkRect(mouseX, mouseY,this._x,this._y,this._width,this._height)) {
 				this.draggable = true;
-		}
-		else {
-			 //this.draggable = false;
+			console.log(mouseY);
+			console.log(this._y+this._height);
 		};
-		
-		// this.cells.forEach(function(cell,index){
-		// 		cell.checkClick();
-		// 		cell.updateColor();
-		// 		cell.display();
-		// 	})
 	},
 
 
@@ -297,8 +291,10 @@ var Container = function(x,y,width,height,meridian,color,numCells,sounds) {
 	},
 
 	this.move = function() {
-		this.currentY=this._y;
-		if(this._y > 0 && this._y < (1000 - this._height)) {
+		// this.currentY=this._y;
+		console.log(mouseY);
+		console.log(this._y);
+		if(this._y > 0 && this._y < (1000)) {
 		this._y = mouseY;
 		this.moveCells();
 		};

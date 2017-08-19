@@ -1,3 +1,15 @@
+
+///need to make a sequence of rules 
+//where the first screen is just click to make sounds
+//secodn says, "good. your goal is to match sounds up"
+//there are five columns of sounds that move up and down.
+//drag any box up or down and you'll see that the five boxes that make up a column move together.  got it?  good.
+//now drag the column at the far left.  see how the boxes change color when they line up with the bright blue line at the right?
+//that's the solution line.  
+//click on the box that's on the solution line.
+//now try to find a box in each column that matches that sound and line them all up on the solution line to solve a sound and see what it's called.
+//solve all five sounds to move to the next level!!
+
 var Rules = function(x,y,width,height,bgColor,textColor) {
 	this.x = x;
 	this.y = y;
@@ -5,7 +17,13 @@ var Rules = function(x,y,width,height,bgColor,textColor) {
 	this.height = height;
 	this.rulesBGcolor = bgColor;
 	this.textColor = textColor;
-	this.rule1 = "Click on any box to hear a sound";
+	this.rule1 = "Click on any box to hear a fragment of sound";
+				// "good"
+				// "There are five sounds split up into five fragments each."
+				// "One fragment of each sound is in each vertical column."
+				// "Got it?"
+				// "yes" "not really"
+
 	this.rule2 = "Move boxes vertically by";
 	this.rule3 = "clicking and dragging";
 	this.rule4 = "Line up five similar sounds along"; 
@@ -14,7 +32,7 @@ var Rules = function(x,y,width,height,bgColor,textColor) {
 	this.rule7 = "'Solve' all five sounds to go";
 	this.rule8 = "to the next level";
 	this.rule9 = "(more levels coming soon)";
-	this.fontSize = 25;
+	this.fontSize = 22;
 
 
 

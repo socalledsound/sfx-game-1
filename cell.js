@@ -75,30 +75,30 @@ var Cell = function(x, y, width, height,color,sound) {
 			this.moving=false;
 	}
 
-	this.updateColor = function() {		
+	// this.updateColor = function() {		
 
-		// this.cellColor=this.cellColor;
-		// if(!this.solved) {
-		// 	if(!this.clicked) {	
+	// 	// this.cellColor=this.cellColor;
+	// 	// if(!this.solved) {
+	// 	// 	if(!this.clicked) {	
 
-		// 		if (this.highlight&& !this.solved) {
-		// 			this.cellColor = this.highlightColor;
-		// 		}
-		// 		// else if (this.onMeridian) {
-		// 		// 	this.cellColor = this.cellMeridianColor;
-		// 		// }
-		// 		else if (this.solved) {
-		// 			this.cellColor = this.solvedColor;
-		// 		}
-		// 		else {
-		// 			this.cellColor = this.cellStartColor;
-		// 		}
-		// 	}
-		// 	else {
-		// 		 this.cellColor = this.soundPlayingColor;
-		// 	}
-		// }	
-	},
+	// 	// 		if (this.highlight&& !this.solved) {
+	// 	// 			this.cellColor = this.highlightColor;
+	// 	// 		}
+	// 	// 		// else if (this.onMeridian) {
+	// 	// 		// 	this.cellColor = this.cellMeridianColor;
+	// 	// 		// }
+	// 	// 		else if (this.solved) {
+	// 	// 			this.cellColor = this.solvedColor;
+	// 	// 		}
+	// 	// 		else {
+	// 	// 			this.cellColor = this.cellStartColor;
+	// 	// 		}
+	// 	// 	}
+	// 	// 	else {
+	// 	// 		 this.cellColor = this.soundPlayingColor;
+	// 	// 	}
+	// 	// }	
+	// },
 
 
 	this.display = function() {

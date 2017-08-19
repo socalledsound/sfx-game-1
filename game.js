@@ -237,13 +237,7 @@ var Game = function(options) {
 			console.log(this);
 			// setTimeout(this.solvedAnimation.bind(this),500);
 			this.solvedAnimationGlowing()
-			
-			// textView();
-		
-
 			};
-
-
 	},
 
 
@@ -253,20 +247,7 @@ var Game = function(options) {
 				return el > 0;
 			}) && !this.antiSolveSpell) { 
 			setTimeout(this.onSolved.bind(this),500);
-
 		};
-
-			
-
-// solvedArray.every(function(el) {
-		// 	console.log(el);
-		// })
-
-//	// draw playhead
-// 	strokeWeight(20);
-// stroke(200,30,30,100);
-// stroke(playHeadColor);
-// line(playHead_x,0,playHead_x,height);
 	},
 
 
@@ -283,7 +264,6 @@ var Game = function(options) {
 			})
 		}
 		this.resetSolution();
-
 	}
 
 	this.resetSolution = function() {
@@ -296,30 +276,20 @@ var Game = function(options) {
 		this.containers.forEach(function(container){
 			container.containerSolved=false;
 		}, this)
-
-
 	},
 
 
-this.solvedAnimationGlowing = function() {
-	// this.disablePlayback=true;
+	this.solvedAnimationGlowing = function() {
 
-	
+		this.containers.forEach(function(container){
+				container.markGlowing(this.currentKey);	
+				container.display();
+				 //setTimeout(container.display.bind(container),400);		
+			}, this)
 
-	this.containers.forEach(function(container){
-			container.markGlowing(this.currentKey);	
-			container.display();
-			 //setTimeout(container.display.bind(container),400);		
-		}, this)
-
-
-
-	this.magicSolvedSound.play();
-	setTimeout(this.solvedAnimationGrey.bind(this),1000);
-
-
-	
-}
+		this.magicSolvedSound.play();
+		setTimeout(this.solvedAnimationGrey.bind(this),1000);	
+	}
 
 
 	this.solvedAnimationGrey = function() {
@@ -377,38 +347,5 @@ this.solvedAnimationGlowing = function() {
 
 	this.cleanup = this.cleanup.bind(this);	
 	this.textAnimation = this.textAnimation.bind(this);
-// function textView() {
-// 	background(background_color);
-// 	textSize(70);
-// 	textFont('Arial');
-// 	fill(200);
-// 	// fill(255,165,0);	
-// 	// strokeWeight(20);
-// 	// stroke(120);
-// 	text(solvedObject,200,100,500,1000);
-// 	// setTimeout(resetSolution,5000);
-// 	noInterface=true;
-// 	setTimeout(blankView,4000);
-// }
-
-// function blankView() {
-// 	background(background_color);
-// 	setTimeout(resetSolution,3000);
-// 	setTimeout(resetView,3000);
-// }
-
-
-// function resetView() {
-// 	noInterface = false;
-// 	background(background_color);
-// 		containers.forEach(function(container) {
-
-// 		container.display();
-		
-// 		})
-// }	
-
-
-
 
 }
