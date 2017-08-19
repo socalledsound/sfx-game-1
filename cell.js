@@ -3,6 +3,10 @@ var Cell = function(x, y, width, height,color,sound) {
 	this.y 			= 	y;
 	this.width 		=	width;
 	this.height 	= 	height;
+	this.reset_x 	= x;
+	this.reset_y 	= y;
+	this.reset_height = height;
+	this.reset_width = width;
 	this.cellColor = color;
 	this.cellStartColor = color;
 	this.highlightColor = game.highlightColor;
@@ -158,8 +162,18 @@ var Cell = function(x, y, width, height,color,sound) {
 		this.solved = false;
 	},
 
-	this.resetCell = function() {
-		this.height=80;
+	this.resetCellPlaying = function() {
+		  this.height=this.reset_height;
+		  this.width=this.reset_width;
+		  this.x = this.reset_x;
+		  this.y = this.reset_y;
+		this.clicked = false;
+		this.cellColor = this.oldColor;
+		this.display();
+
+	},
+
+		this.resetCell = function() {
 		this.clicked = false;
 		this.cellColor = this.oldColor;
 		this.display();
@@ -195,10 +209,22 @@ var Cell = function(x, y, width, height,color,sound) {
 		this.oldColor = this.cellColor;
 		
 		this.cellColor = this.soundPlayingColor;
+			this.reset_x = this.x;
+			this.reset_y = this.y;
+			this.reset_height = this.height;
+			this.reset_width = this.width;
+			this.x = this.x+5;
+			this.y = this.y+5;
+			this.height = this.height-10;
+			this.width = this.width-10;
+		  // this.height = this.init_height-10;
+		  // this.width = this.init_width-10;
+		  // this.x = this.init_x + 5;
+		  // this.y = this.init_y + 5;
 		// this.startBlink();	
 		// this.playing=true;
 		 this.playSound();
-		setTimeout(this.resetCell.bind(this),300);
+		setTimeout(this.resetCellPlaying.bind(this),300);
 	}	
 
 

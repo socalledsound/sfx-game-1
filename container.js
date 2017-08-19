@@ -176,10 +176,8 @@ var Container = function(x,y,width,height,meridian,color,numCells,sounds) {
 		this.cells.forEach(function(cell,index){
 				console.log("cell clicked");
 				if(cell.playing) {
-						cell.sound.stop();
-						//cell.highlight=false;
-						cell.playing=false
-						// cell.cellColor = cell.startColor;
+						cell.sound.stop();						
+						cell.playing=false						
 						cell.display;
 					}
 				cell.checkClick();
