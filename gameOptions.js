@@ -12,7 +12,7 @@ var gameOptions = {
 	playHeadColor: [239,228,60,100],
 	rulesX:80,
 	rulesY:700,
-	rulesHeight:500,
+	rulesHeight:320,
 	rulesWidth:500,
 	rulesBGcolor:[200,200,200],
 	rulesTextColor:[2,12,51],

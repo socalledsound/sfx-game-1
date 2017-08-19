@@ -18,7 +18,7 @@
 
 
 
-var Rules = function(x,y,width,height,bgColor,textColor) {
+var Rules = function(x,y,height,width,bgColor,textColor) {
 	this.x = x;
 	this.y = y;
 	this.width = width;
@@ -41,7 +41,7 @@ var Rules = function(x,y,width,height,bgColor,textColor) {
 
 	this.initRules = function() {
 		fill(this.rulesBGcolor);
-		rect(this.x, this.y, this.height,this.width);
+		rect(this.x, this.y, this.width,this.height);
 		textSize(this.fontSize);
 		textFont('Sans');
 		fill(this.textColor);
