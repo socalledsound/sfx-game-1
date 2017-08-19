@@ -24,7 +24,7 @@ var gameOptions = {
 	meridian:400,
 	boxHeight:80,
 	playHead_x:10,
-	mainClickSoundPath:'sounds/interfaceSounds/mainClick.ogg',
+	mainClickSoundPath:'sounds/interfaceSounds/mainClick.mp3',
 	magicSolvedSoundPath: 'sounds/interfaceSounds/magicalSolvedSound.ogg'
 
 };
