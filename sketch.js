@@ -8,7 +8,7 @@ var solvedFont;
 
 function setup() {
 	solvedFont = loadFont("fonts/Lato-Black.ttf");
-	createCanvas(1200,1000);
+	createCanvas(1200,850);
 	game = new Game(gameOptions);
 	game.initGame();
 };
