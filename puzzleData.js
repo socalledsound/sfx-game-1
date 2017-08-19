@@ -2,17 +2,30 @@
 
 const puzzleData = { 
 	sounds: [
-	{
-		title: "CANVAS SUITCASE ZIPPER, LONG ZIP OPEN OR CLOSE, SIDE COMPARTMENT, GOOD, SEVERAL TAKES",
-		fullSound: "sounds/zippers/canvas-suitcase-zipper/cszipper-full.mp3",
+	// {
+	// 	title: "CANVAS SUITCASE ZIPPER, LONG ZIP OPEN OR CLOSE, SIDE COMPARTMENT, GOOD, SEVERAL TAKES",
+	// 	fullSound: "sounds/zippers/canvas-suitcase-zipper/cszipper-full.mp3",
+	// 	solutionKey:"A",
+	// 	alreadySolved: false,
+	// 	clips: [
+	// 		{A1:"sounds/zippers/canvas-suitcase-zipper/cszipper1.mp3"},
+	// 		{A2:"sounds/zippers/canvas-suitcase-zipper/cszipper2.mp3"},
+	// 		{A3:"sounds/zippers/canvas-suitcase-zipper/cszipper3.mp3"},
+	// 		{A4:"sounds/zippers/canvas-suitcase-zipper/cszipper4.mp3"},
+	// 		{A5:"sounds/zippers/canvas-suitcase-zipper/cszipper5.mp3"}
+	// 	]
+	// },
+		{
+		title: "cartoon monkeys chattering in a court of laws",
+		fullSound: "sounds/monkeys/monkeys-full.mp3",
 		solutionKey:"A",
 		alreadySolved: false,
 		clips: [
-			{A1:"sounds/zippers/canvas-suitcase-zipper/cszipper1.mp3"},
-			{A2:"sounds/zippers/canvas-suitcase-zipper/cszipper2.mp3"},
-			{A3:"sounds/zippers/canvas-suitcase-zipper/cszipper3.mp3"},
-			{A4:"sounds/zippers/canvas-suitcase-zipper/cszipper4.mp3"},
-			{A5:"sounds/zippers/canvas-suitcase-zipper/cszipper5.mp3"}
+			{A1:"sounds/monkeys/monkeys2.mp3"},
+			{A2:"sounds/monkeys/monkeys1.mp3"},
+			{A3:"sounds/monkeys/monkeys3.mp3"},
+			{A4:"sounds/monkeys/monkeys4.mp3"},
+			{A5:"sounds/monkeys/monkeys5.mp3"}
 		]
 	},
 	{
@@ -56,15 +69,30 @@ const puzzleData = {
 	},
 	{
 		title: "ANNOYING HIGH FAIRY VOCALIZATION",
-		fullSound: "sounds/highFairy/highFairy-full.mp3",
+		fullSound: "sounds/wobbly/wobbly-full.mp3",
 		solutionKey:"E",
 		alreadySolved: false,
 		clips: [
-			{E1:"sounds/highFairy/highFairy1.mp3"},
-			{E2:"sounds/highFairy/highFairy2.mp3"},
-			{E3:"sounds/highFairy/highFairy3.mp3"},
-			{E4:"sounds/highFairy/highFairy4.mp3"},
-			{E5:"sounds/highFairy/highFairy5.mp3"},
+			{E1:"sounds/wobbly/wobbly1.mp3"},
+			{E2:"sounds/wobbly/wobbly2.mp3"},
+			{E3:"sounds/wobbly/wobbly3.mp3"},
+			{E4:"sounds/wobbly/wobbly4.mp3"},
+			{E5:"sounds/wobbly/wobbly5.mp3"},
 		]
-	}	
+	}
+
+	// 	{
+	// 	title: "ANNOYING HIGH FAIRY VOCALIZATION",
+	// 	fullSound: "sounds/highFairy/highFairy-full.mp3",
+	// 	solutionKey:"E",
+	// 	alreadySolved: false,
+	// 	clips: [
+	// 		{E1:"sounds/highFairy/highFairy1.mp3"},
+	// 		{E2:"sounds/highFairy/highFairy2.mp3"},
+	// 		{E3:"sounds/highFairy/highFairy3.mp3"},
+	// 		{E4:"sounds/highFairy/highFairy4.mp3"},
+	// 		{E5:"sounds/highFairy/highFairy5.mp3"},
+	// 	]
+	// }
+
 ]};
