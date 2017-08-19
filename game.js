@@ -37,10 +37,10 @@ var Game = function(options) {
 	this.solvedText;
 	this.solvedTextSize=20;
 	// this.solvedTextFont='Arial';
-	this.solvedText_x=150;
+	this.solvedText_x=options.xStart+5;
 	this.solvedText_y=365
 	;
-	this.solvedText_width=500;
+	this.solvedText_width=490;
 	this.solvedText_height=120;
 	this.solved = false;
 	this.antiSolveSpell = false;
@@ -324,6 +324,7 @@ var Game = function(options) {
 		
 		// background(this.background_color);
 		textSize(this.solvedTextSize);
+		// textFont(solvedFont);
 		textFont('Sans');
 		fill(this.solvedTextColor);
 
