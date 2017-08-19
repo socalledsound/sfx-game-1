@@ -21,7 +21,7 @@ function touchmove(e) {
 
 function setup() {
 	solvedFont = loadFont("fonts/Lato-Black.ttf");
-	createCanvas(1200,1200);
+	createCanvas(680,1050);
 	game = new Game(gameOptions);
 	game.initGame();
 };
