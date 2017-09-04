@@ -22,7 +22,7 @@ var Container = function(x,y,width,height,meridian,color,numCells,sounds) {
 
 	this.initCells = function() {
 				 this.initKeys = Object.keys(this.sounds);
-				 console.log(this.sounds);
+				 console.log(this.initKeys);
 				// this.scrambledKeys = this.initKeys.sort(function(){return Math.random() * 2 -1;});
 				// console.log(this.sounds);
 				//  console.log(this.scrambledKeys);
@@ -30,7 +30,7 @@ var Container = function(x,y,width,height,meridian,color,numCells,sounds) {
 
 			var scrambledOrder = this.initKeys.sort(function(){return Math.random() * 2 -1;});
 			
-			// console.log(scrambledOrder);
+			 console.log(scrambledOrder);
 			
 
 			for ( var i=0; i<this.numCells; i++) {
@@ -38,14 +38,15 @@ var Container = function(x,y,width,height,meridian,color,numCells,sounds) {
 				var y= this._y + ((this._height/this.numCells)*i);
 				var width = this._width * 1.0;
 				var height = this._height/this.numCells;
-				var color = game.cellStartColor;
+				var color = game.cellStartColors[scrambledOrder[i]];
+				var borderColor=game.cellBorderColor;
 				// this.scrambledSounds=this.scrambleSounds(this.sounds,keys);
 				// var cellSounds = this.sounds;
 				var cellSound = this.sounds[scrambledOrder[i]];
 				// var cellKey = this.scrambledKeys[i].charAt(0);
 				 // console.log(cellSound);
 				// var sound = new Howl({src:[this.sound] });
-				this.cells[i] = new Cell(x, y, width, height, color, cellSound);
+				this.cells[i] = new Cell(x, y, width, height, color, borderColor,cellSound);
 				 // console.log(this.cells[i]);
 			}
 	},

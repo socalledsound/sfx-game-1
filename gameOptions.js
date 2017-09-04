@@ -1,7 +1,8 @@
 var gameOptions = {
 	background_color: [125, 135, 145],
 	//cellStartColor: [2,12,51],
-	cellStartColor: [59, 37, 145],
+	cellBorderColor: [59, 37, 145],
+	cellStartColor: [255,255,255],
 	cellMeridianColor:[10,10,80],
 	highlightColor: [23,225,239],
 	solvedTextColor:[200,200,200],

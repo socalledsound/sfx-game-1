@@ -1,4 +1,4 @@
-var Cell = function(x, y, width, height,color,sound) {
+var Cell = function(x, y, width, height,color,borderColor,sound) {
 	this.x 			= 	x;
 	this.y 			= 	y;
 	this.width 		=	width;
@@ -8,6 +8,7 @@ var Cell = function(x, y, width, height,color,sound) {
 	this.reset_height = height;
 	this.reset_width = width;
 	this.cellColor = color;
+	this.cellBorderColor = borderColor;
 	this.cellStartColor = color;
 	this.highlightColor = game.highlightColor;
 	this.cellMeridianColor = game.cellMeridianColor;
@@ -18,7 +19,7 @@ var Cell = function(x, y, width, height,color,sound) {
 	
 	this.oldColor = color;
 	
-	 this.key 		= 	Object.keys(sound);
+	this.key 		= 	Object.keys(sound);
 	this.sound		=	new Howl({src:[sound[this.key]],html5: false});
 
 
@@ -34,7 +35,7 @@ var Cell = function(x, y, width, height,color,sound) {
 	this.visible    = 	true;
 	this.trig 		= 	1;
 
-	 // console.log(this.key);
+	  console.log(this.key);
 	// this.display = function() {
 	// 	fill(this._color);
 	// 	rect(this._x, this._y, this._width, this._height);
@@ -104,8 +105,12 @@ var Cell = function(x, y, width, height,color,sound) {
 	this.display = function() {
 
 		this.visible === true ? strokeWeight(0.5) : strokeWeight(0.0);	
-		fill(this.cellColor);		
+		// stroke(this.cellBorderColor);
+		// strokeWeight(20);
+		fill(this.cellBorderColor);
 		rect(this.x-5,this.y,this.width,this.height);
+		fill(this.cellColor);		
+		rect(this.x+5,this.y+10,this.width-20,this.height-20);
 	},
 
 	this.markAsMeridian = function() {
@@ -138,6 +143,7 @@ var Cell = function(x, y, width, height,color,sound) {
 	this.markSolved = function() {
 		this.solved = true;
 		this.visible=false;
+		this.cellBorderColor = this.solvedColor;
 		this.cellColor = this.solvedColor;
 	},
 

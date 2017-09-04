@@ -3,7 +3,8 @@ var Game = function(options) {
 	this.clickSound = new Howl({src:options.mainClickSoundPath,html5: false});
 	this.magicSolvedSound = new Howl({src:options.magicSolvedSoundPath})
 	this.background_color = options.background_color;
-	this.cellStartColor=options.cellStartColor;
+	
+	this.cellBorderColor=options.cellBorderColor;
 	this.cellMeridianColor = options.cellMeridianColor;
 	this.glowingColor= options.glowingColor;
 	this.solvedTextColor = options.solvedTextColor;
@@ -50,6 +51,9 @@ var Game = function(options) {
 	this.stopEverythingForText=false;
 	this.curIndex=0;
 	
+
+	this.cellStartColors=[[100,200,20],[200,20,20],[100,200,200],[200,20,200],[100,20,100]];
+
 
 	this.initGame = function() {
 		
