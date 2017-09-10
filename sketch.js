@@ -50,12 +50,15 @@ function setup() {
 	game = new Game(gameOptions);
 	game.initGame();
 // initCanvasListener();
-
-
- 
-
 };
 
+
+function draw() {
+  if(!game.paused) {
+    game.drawGame();
+  }
+  
+}
 
 
 

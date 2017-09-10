@@ -10,17 +10,17 @@ var Interface = function() {
 
 	},
 
-	this.displayInterface = function() {
+	// this.displayInterface = function() {
 
-				strokeWeight(1);
-			stroke(interfaceColor);
-			fill(background_color);
-			rect(this.playButton.x,this.playButton.y,this.playButton.width,this.playButton.height);
-			fill(255);
-			triangle(this.playButton.x+30,this.playButton.y+20,this.playButton.x+30,this.playButton.y+60,this.playButton.x+60,this.playButton.y+40);
+	// 			strokeWeight(1);
+	// 		stroke(interfaceStrokeColor);
+	// 		fill(background_color);
+	// 		rect(this.playButton.x,this.playButton.y,this.playButton.width,this.playButton.height);
+	// 		fill(255);
+	// 		triangle(this.playButton.x+30,this.playButton.y+20,this.playButton.x+30,this.playButton.y+60,this.playButton.x+60,this.playButton.y+40);
 
 
-	},
+	// },
 
 	this.checkPlayButton = function() {
 				if(checkRect(mouseX, mouseY,this.playButton.x,this.playButton.y,this.playButton.width,this.playButton.height)) {
@@ -43,7 +43,7 @@ var PlayButton = function(x,y,width,height) {
 	this.paused 	= 	true;
 }
 
-var Triangle = function(a,b,c,d,e,f,fillColor,strokeColor) {
+var Triangle = function(a,b,c,d,e,f,fillColor,strokeColor,type) {
 			this.a = a;
 			this.b = b;
 			this.c = c;
@@ -52,10 +52,21 @@ var Triangle = function(a,b,c,d,e,f,fillColor,strokeColor) {
 			this.f = f;
 			this.fillColor=fillColor;
 			this.strokeColor = strokeColor;
+			this.type = type;
 
-				fill(this.fillColor);
-				stroke(this.strokeColor);
-				triangle(this.a,this.b,this.c,this.d,this.e,this.f);
+		this.display = function() {
+			fill(this.fillColor);
+			stroke(this.strokeColor);
+			strokeWeight(3);
+			triangle(this.a,this.b,this.c,this.d,this.e,this.f);
+			triangle(this.a,this.b,this.c,this.d,this.e,this.f);
+			// console.log(this.type);
+			// stroke(this.interfaceStrokeColor);
+		}		
+				// stroke(this.strokeColor);
+				// strokeWeight(3);
+				// fill(this.fillColor);
+				// triangle(this.a,this.b,this.c,this.d,this.e,this.f);
 
 };
 

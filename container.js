@@ -9,11 +9,11 @@ var Container = function(x,y,width,height,meridian,color,numCells,sounds) {
 	this.draggable = false;
 	this.cells=[];
 	this.currentY= y;
-	this.interfaceColor = [200,200,200];
+	this.interfaceColor = game.interfaceColor;
+	this.interfaceStrokeColor = game.interfaceStrokeColor;
 	this.currentColumn = 0;
 	this.sounds = sounds;
-	this.upperTriangles;
-	this.lowerTriangles;
+
 	this.meridianKey = "Z";
 	this.containerSolved = false;
 
@@ -22,7 +22,7 @@ var Container = function(x,y,width,height,meridian,color,numCells,sounds) {
 
 	this.initCells = function() {
 				 this.initKeys = Object.keys(this.sounds);
-				 console.log(this.initKeys);
+				 // console.log(this.initKeys);
 				// this.scrambledKeys = this.initKeys.sort(function(){return Math.random() * 2 -1;});
 				// console.log(this.sounds);
 				//  console.log(this.scrambledKeys);
@@ -30,7 +30,7 @@ var Container = function(x,y,width,height,meridian,color,numCells,sounds) {
 
 			var scrambledOrder = this.initKeys.sort(function(){return Math.random() * 2 -1;});
 			
-			 console.log(scrambledOrder);
+			 // console.log(scrambledOrder);
 			
 
 			for ( var i=0; i<this.numCells; i++) {
@@ -38,7 +38,8 @@ var Container = function(x,y,width,height,meridian,color,numCells,sounds) {
 				var y= this._y + ((this._height/this.numCells)*i);
 				var width = this._width * 1.0;
 				var height = this._height/this.numCells;
-				var color = game.cellStartColors[scrambledOrder[i]];
+				var color = game.cellStartColor;
+				var hiddenColor = game.cellHiddenColors[scrambledOrder[i]];
 				var borderColor=game.cellBorderColor;
 				// this.scrambledSounds=this.scrambleSounds(this.sounds,keys);
 				// var cellSounds = this.sounds;
@@ -46,50 +47,12 @@ var Container = function(x,y,width,height,meridian,color,numCells,sounds) {
 				// var cellKey = this.scrambledKeys[i].charAt(0);
 				 // console.log(cellSound);
 				// var sound = new Howl({src:[this.sound] });
-				this.cells[i] = new Cell(x, y, width, height, color, borderColor,cellSound);
+				this.cells[i] = new Cell(x, y, width, height, color, hiddenColor, borderColor,cellSound);
 				 // console.log(this.cells[i]);
 			}
 	},
 
-	this.initContainerTriangles = function() {
-			this.initUpperTriangles();
-			this.initLowerTriangles();
-			
-	},
 
-
-	this.initUpperTriangles = function() {
-			
-				var a = this._x + 20;
-				var b = this._y - 20;
-				var c = this._x + 50;
-				var d = this._y - 40;
-				var e = this._x + 80;
-				var f = this._y  -20;
-				var fill = this.interfaceColor;
-				var stroke = this.interfaceColor;	
-
-				this.upperTriangles =  new Triangle(a,b,c,d,e,f,fill,stroke);
-				// console.log(this.upperTriangles.a);
-
-
-			
-	},
-
-		this.initLowerTriangles = function() {
-			
-				var a = this._x + 20;
-				var b = this._y + this._height+40;
-				var c = this._x + 50;
-				var d = this._y + this._height+40+20;
-				var e = this._x + 80;
-				var f = this._y + this._height+40;
-				var fill = this.interfaceColor;
-				var stroke = this.interfaceColor;	
-
-				this.lowerTriangles =  new Triangle(a,b,c,d,e,f,fill,stroke);
-				 // console.log(this.lowerTriangles.b);			
-	},
 
 
 	this.checkMeridian = function() {
@@ -98,7 +61,7 @@ var Container = function(x,y,width,height,meridian,color,numCells,sounds) {
 
 			if(!cell.solved) {
 
-					if((cell.y > (this.meridian-50)) && (cell.y < (this.meridian+40)) && !cell.playing) {
+					if((cell.y > (this.meridian-50)) && (cell.y < (this.meridian+40))) {
 						// cell.cellColor = [200,0,0];
 						cell.markAsMeridian();
 
@@ -120,7 +83,7 @@ var Container = function(x,y,width,height,meridian,color,numCells,sounds) {
 	},
 
 	this.checkSolution = function(key) {
- //console.log(key);
+ console.log(key);
 
 			this.cells.forEach(function(cell,index){
 				
@@ -137,6 +100,60 @@ var Container = function(x,y,width,height,meridian,color,numCells,sounds) {
 							cell.markHighlighted();
 							 
 							 this.containerSolved = true;
+							 // console.log('true');
+						}
+						else if (cell.key === key && !cell.onMeridian){
+							this.containerSolved = false;
+							cell.unHighlight();
+						}
+						else
+							{
+								
+								 // cell.resetCell();
+								 // cell.unHighlight();
+								
+							 	
+						}
+
+
+				}	
+				 // console.log(key);	
+				 // console.log(cell.onMeridian);
+			}, this)
+
+
+		// if(this.cells.indexOf(
+		// 	function(cell){
+		// 		cell.solved
+		// 	}) != -1) {
+		// 	console.log("whew")
+		// 	};
+
+	},
+
+
+		this.checkSolution = function(key) {
+
+
+			this.cells.forEach(function(cell,index){
+				
+				if(!cell.solved) {
+					// console.log("key: " + key)
+					// console.log("cellkey: " + cell.key);
+
+
+
+						if(cell.key != key && !cell.onMeridian) {
+							cell.resetCell();
+							 cell.unHighlight();
+						}
+
+						if(cell.key === key && cell.onMeridian && !cell.solved) {
+
+							cell.markHighlighted();
+							 
+							 this.containerSolved = true;
+							 // console.log('true');
 						}
 						else if (cell.key === key && !cell.onMeridian){
 							this.containerSolved = false;
@@ -150,7 +167,11 @@ var Container = function(x,y,width,height,meridian,color,numCells,sounds) {
 								
 							 	
 						}
-				}		
+
+
+				}	
+				 // console.log(key);	
+				 // console.log(cell.onMeridian);
 			}, this)
 
 
@@ -165,16 +186,20 @@ var Container = function(x,y,width,height,meridian,color,numCells,sounds) {
 
 
 
+
 	this.checkClick = function() {
-		if(this.checkRect(mouseX, mouseY,this._x,this._y,this._width,this._height)) {
+		// if(this.checkRect(mouseX, mouseY,this._x,this._y,this._width,this._height)) {
 
-				this.clicked = true;
+		// 		this.clicked = true;
 
-		}
-		else {
-			 //this.draggable = false;
-		};
+		// }
+		// else {
+		// 	 //this.draggable = false;
+		// };
 		
+
+
+
 		this.cells.forEach(function(cell,index){
 				// console.log("cell clicked");
 				if(cell.playing) {
@@ -191,8 +216,8 @@ var Container = function(x,y,width,height,meridian,color,numCells,sounds) {
 		this.checkDraggable = function() {
 		if(this.checkRect(mouseX, mouseY,this._x,this._y,this._width,this._height)) {
 				this.draggable = true;
-			console.log(mouseY);
-			console.log(this._y+this._height);
+			// console.log(mouseY);
+			// console.log(this._y+this._height);
 		};
 	},
 
@@ -225,10 +250,7 @@ var Container = function(x,y,width,height,meridian,color,numCells,sounds) {
 		
 	},
 	this.display = function() {
-			fill(this.interfaceColor);
-			stroke(this.interfaceColor);
-			triangle(this.upperTriangles.a,this.upperTriangles.b,this.upperTriangles.c,this.upperTriangles.d,this.upperTriangles.e,this.upperTriangles.f);
-			triangle(this.lowerTriangles.a,this.lowerTriangles.b,this.lowerTriangles.c,this.lowerTriangles.d,this.lowerTriangles.e,this.lowerTriangles.f);
+
 			this.cells.forEach(function(cell,index){
 				// cell.updateColor();
 				cell.display();
@@ -273,30 +295,28 @@ var Container = function(x,y,width,height,meridian,color,numCells,sounds) {
 			});	
 	},
 
-	this.moveTriangles = function() {
-		this.upperTriangles.a = this._x + 20;
-		this.upperTriangles.b = this._y - 20;
-		this.upperTriangles.c = this._x + 50;
-		this.upperTriangles.d = this._y - 40;
-		this.upperTriangles.e =  this._x + 80;
-		this.upperTriangles.f =  this._y  -20;
 
-		this.lowerTriangles.a = this._x + 20;
-		this.lowerTriangles.b = this._y + this._height+40;
-		this.lowerTriangles.c = this._x + 50;
-		this.lowerTriangles.d = this._y + this._height+40+20;
-		this.lowerTriangles.e = this._x + 80;
-		this.lowerTriangles.f = this._y + this._height+40;
-
-
-	},
 
 	this.move = function() {
-		// this.currentY=this._y;
-		console.log(mouseY);
-		console.log(this._y);
+
 		if(this._y > 0 && this._y < (1000)) {
 		this._y = mouseY;
+		this.moveCells();
+		};
+
+		if (this._y < 40) {this._y=40};
+
+		if (this._y > 360) {this._y = (360 )};
+		this.settleInGrid();
+		this.cells.forEach(function(cell,index){
+		cell.checkBoundary();
+		});
+	},
+
+	this.moveBy_y = function(amount) {
+		
+		if(this._y > 0 && this._y < (1000)) {
+		this._y = this._y + amount;
 		this.moveCells();
 		};
 

@@ -1,6 +1,6 @@
 
 var Game = function(options) {	
-	this.clickSound = new Howl({src:options.mainClickSoundPath,html5: false});
+	this.clickSound = new Howl({src:options.mainClickSoundPath,html5: false,volume:0.5});
 	this.magicSolvedSound = new Howl({src:options.magicSolvedSoundPath})
 	this.background_color = options.background_color;
 	
@@ -11,6 +11,7 @@ var Game = function(options) {
 	this.highlightColor = options.highlightColor;
 	this.solvedColor = options.solvedColor;
 	this.interfaceColor = options.interfaceColor;
+	this.interfaceStrokeColor = options.interfaceStrokeColor;
 	this.vertColor = options.vertColor;
 	this.playHeadColor = options.playHeadColor;
 	this.numContainers = options.numContainers;
@@ -23,6 +24,10 @@ var Game = function(options) {
 	this.playHead_x=options.playHead_x;
 	this.playMeridian = this.height/2-100;
 	this.containers = [];
+	this.upperTriangles=[];
+	this.lowerTriangles=[];
+	this.containerWidth=options.containerWidth;
+	this.containerHeight=options.containerHeight;
 	this.container1sounds=[];
 	this.container2sounds=[]; 
 	this.container3sounds=[];
@@ -31,37 +36,38 @@ var Game = function(options) {
 	
 	this.containerSounds = [this.container1sounds,this.container2sounds, this.container3sounds, this.container4sounds, this.container5sounds];
 	this.playbackArray = [];
+	this.meridianKey="Z";
 	this.currentKey = "Z";
 	this.playHeadPaused = false;
 
 	this.solvedArray = [0,0,0,0,0];
 	this.solvedText;
-	this.solvedTextSize=20;
+	this.solvedTextSize=60;
 	// this.solvedTextFont='Arial';
 	this.solvedText_x=options.xStart+5;
-	this.solvedText_y=365
-	;
-	this.solvedText_width=490;
-	this.solvedText_height=120;
+	this.solvedText_y=100;
+	this.solvedText_width=600;
+	this.solvedText_height=800;
 	this.solved = false;
 	this.antiSolveSpell = false;
 	this.disablePlayback = false;
 	this.noInterface = false;
 	// this.disableInterface = false;
-	this.stopEverythingForText=false;
+	this.paused=false;
 	this.curIndex=0;
 	
-
-	this.cellStartColors=[[100,200,20],[200,20,20],[100,200,200],[200,20,200],[100,20,100]];
+	this.cellStartColor = [200,200,200];
+	this.cellHiddenColors=[[6, 62, 229],[196, 17, 44],[229, 99, 6],[200,20,200],[11, 221, 25]];
 
 
 	this.initGame = function() {
 		
-
+		 background(this.background_color);
 		this.loadPuzzleSounds();
-		this.initInterface();
+		
 		this.initContainers();
-
+		this.initInterface();
+		
 	},
 
 
@@ -78,12 +84,43 @@ var Game = function(options) {
 
 	this.initInterface = function () {
 		stroke(30,100,100);
-		background(this.background_color);
-		this.drawMeridianMarker();
-		this.rules = new Rules(options.rulesX,options.rulesY,options.rulesHeight,options.rulesWidth,options.rulesBGcolor,options.rulesTextColor);
+
+		this.drawInterface();
+		this.rules = new Rules(options.rulesX,options.rulesY,options.rulesHeight,options.rulesWidth,options.background_color,options.rulesTextColor);
 		this.rules.initRules();
 	}
 
+
+
+
+	this.initUpperTriangle = function(x,y) {
+			
+		var a = x + 20;
+		var b = y - 20;
+		var c = x + 50;
+		var d = y - 40;
+		var e = x + 80;
+		var f = y  -20;
+		var fill = this.interfaceColor;
+		var stroke = this.interfaceStrokeColor;		
+
+		this.upperTriangles.push(new Triangle(a,b,c,d,e,f,fill,stroke,"upper"));			
+	}, 
+
+	this.initLowerTriangle = function(x,y) {
+			
+		var a = x + 20;
+		var b = y + this.containerHeight+40;
+		var c = x + 50;
+		var d = y + this.containerHeight+40+20;
+		var e = x + 80;
+		var f = y + this.containerHeight+40;
+		var fill = this.interfaceColor;
+		var stroke = this.interfaceStrokeColor;	
+
+		this.lowerTriangles.push(new Triangle(a,b,c,d,e,f,fill,stroke,"lower"));
+						
+	},
 
 	this.initContainers = function() {
 		for (var i = 0; i < this.numContainers; i++) {
@@ -91,59 +128,132 @@ var Game = function(options) {
 		}
 
 		this.containers.forEach(function(container,index){
+			this.initUpperTriangle(container._x,container._y);
+			this.initLowerTriangle(container._x,container._y);
 			container.initCells();
-			container.initContainerTriangles();
-			meridianKey = container.checkMeridian();
+			container.checkMeridian();
 			container.display();
 
-			if (index<1) {
-					this.currentKey = meridianKey;
-				};
-			container.checkSolution(this.currentKey);
-			container.display();
 		},this);
+		console.log(this.lowerTriangles);
 	}
 
 
 	this.drawInterface = function() {
 
-		stroke(30,100,100);
-		background(this.background_color);
-		this.drawMeridianMarker();
+		// stroke(this.interfaceStrokeColor);
+		 
+
+		this.upperTriangles.forEach(function(triangle) {
+			triangle.display();
+			});	
+		this.lowerTriangles.forEach(function(triangle) {
+			triangle.display();
+			});	
+
+		this.drawMeridianBox();
+		
 
 	}
 
 	this.drawContainers = function () {
-
+			this.containers.forEach(function(container){
+				container.display();
+						
+			})
 	}
 
 	this.drawGame = function() {
-		// this.drawPlayMarker();
-		this.drawInterface();
+		background(this.background_color);
 		this.drawContainers();
+		this.drawInterface();
+		this.checkSolution();
+	},
+
+
+	this.checkSolution = function () {
+		 console.log(this.solvedArray);
+		this.containers.forEach(function(container,index){
+			this.meridianKey = container.checkMeridian();
+				if (index<1) {
+						this.currentKey = this.meridianKey;						
+					};
+			container.checkSolution(this.currentKey);
+			if(container.containerSolved) {
+					this.solvedArray[index] = 1;					
+				}
+			else {
+					this.solvedArray[index]=0;
+				}
+		},this);
+		this.checkEvery();
 	},
 
 
 	this.clicked = function() {
-		if(!this.stopEverythingForText) {
-			
+		if(!this.paused) {
+
+
+		this.upperTriangles.forEach(function(triangle,index) {
+			this.checkTriangleClick(triangle,index);
+			},this);
+
+		this.lowerTriangles.forEach(function(triangle,index) {
+			this.checkTriangleClick(triangle,index);
+			},this);
+		
 			this.containers.forEach(function(container){
 				container.checkClick();	
 				container.display();
-						
-			})
+			},this)
+			this.drawInterface();
+		};
+		
+	},
+
+
+		this.checkTriangleClick = function(triangle, index) {
+		var v0 = [triangle.e-triangle.a,triangle.f-triangle.b];
+		var v1 = [triangle.c-triangle.a,triangle.d-triangle.b];
+		var v2 = [mouseX-triangle.a,mouseY-triangle.b];
+
+		var dot00 = (v0[0]*v0[0]) + (v0[1]*v0[1]);
+		var dot01 = (v0[0]*v1[0]) + (v0[1]*v1[1]);
+		var dot02 = (v0[0]*v2[0]) + (v0[1]*v2[1]);	
+		var dot11 = (v1[0]*v1[0]) + (v1[1]*v1[1]);
+		var dot12 = (v1[0]*v2[0]) + (v1[1]*v2[1]);
+
+		var invDenom = 1/ (dot00 * dot11 - dot01 * dot01);
+
+		var u = (dot11 * dot02 - dot01 * dot12) * invDenom;
+		var v = (dot00 * dot12 - dot01 * dot02) * invDenom;
+
+		if ((u >= 0) && (v >= 0) && (u + v < 1) && triangle.type === "upper" && this.containers[index]._y > 90) {
+			this.moveColumnUpOneRow(index);
+		}
+		else if ((u >= 0) && (v >= 0) && (u + v < 1) && triangle.type === "lower" && this.containers[index]._y < 350) {
+			this.moveColumnDownOneRow(index);
 		};
 
 	},
 
 
+	this.moveColumnUpOneRow = function (index) {
+		this.upperTriangles[index].moveBy_y(this.boxHeight * -1);
+		this.lowerTriangles[index].moveBy_y(this.boxHeight * -1);
+		this.containers[index].moveBy_y(this.boxHeight * -1);
+	},
+
+	this.moveColumnDownOneRow = function (index) {
+		this.upperTriangles[index].moveBy_y(this.boxHeight);
+		this.lowerTriangles[index].moveBy_y(this.boxHeight);
+		this.containers[index].moveBy_y(this.boxHeight);
+	},
 
 
 	this.drawPlayMarker = function() {
 		fill(this.highlightColor);
 		rect(50,360,100,35);
-		// strokeWeight(3);
-	 // 	line(0,400,100,400);
 	},
 
 	this.drawMeridianMarker = function() {
@@ -153,100 +263,80 @@ var Game = function(options) {
 		rect(20,395,40,10);
 	},
 
+	this.drawMeridianBox = function() {
+		stroke(this.interfaceColor);
+		strokeWeight(3);
+		fill(this.highlightColor);
+		rect(80,360,500,80);
+	},
+
 
 	this.playClick = function () {
 		this.clickSound.play();
 	},
 
-	this.dragged = function() {
 
-		this.antiSolveSpell=false;
+	this.moveUpperTriangle =  function(triangle,container_x,container_y) {
+		triangle.a = container_x + 20;
+		triangle.b = container_y - 20;
+		triangle.c = container_x + 50;
+		triangle.d = container_y - 40;
+		triangle.e = container_x + 80;
+		triangle.f = container_y  -20;
+
+	},
 	
-		var meridianKey="Z";
+	this.moveLowerTriangle = function(triangle,container_x,container_y) {
+		triangle.a = container_x + 20;
+		triangle.b = container_y + this.containerHeight+40;
+		triangle.c = container_x + 50;
+		triangle.d = container_y + this.containerHeight+40+20;
+		triangle.e = container_x + 80;
+		triangle.f = container_y + this.containerHeight+40;
+
+	},
+
+
+
+	this.dragged = function() {
+		background(this.background_color);
+		this.antiSolveSpell=false;
+
 		if(!this.noInterface) {
-
-			
-			this.drawInterface();
-
 			this.containers.forEach(function(container,index) {
-
-				container.checkSolution(this.currentKey);
-
 				container.checkDraggable();
 				if(container.draggable) {
+
 					container.move();
 					container.moveCells();
-					container.moveTriangles();
-
-
-					meridianKey = container.checkMeridian();
-
-					if (index<1) {
-						this.currentKey = meridianKey;
-
-					};
-
-					
+					this.moveUpperTriangle(this.upperTriangles[index],container._x,container._y);
+					this.moveLowerTriangle(this.lowerTriangles[index],container._x,container._y);
+					container.checkMeridian();					
 				};	
-					container.checkSolution(this.currentKey);
-					container.display();
-					
-					if(container.containerSolved) {
-						this.solvedArray[index] = 1;
-					}
-					else {
-						this.solvedArray[index]=0;
-					}
-				
-
-
 			},this);
-		this.checkEvery();
-		};
 		
+		};
 	},
 
 	this.onSolved = function () {
-
-
-
-			 var solvedObject = puzzleData.sounds.filter(function(sound,i,array) {
-				 // console.log("solved key" + currentKey)	
-				 // console.log(sound.solutionKey);
-				
-					if(sound.solutionKey === this.currentKey) {
-						// console.log("returning" + sound);
-						//  console.log(sound.title);
-						return sound.title;
-					};
+		this.paused = true;
+		 var solvedObject = puzzleData.sounds.filter(function(sound,i,array) {
+				if(sound.solutionKey === this.currentKey) {
+					return sound.title;
+				};
 			},this)
 			
-			
-			// containers.forEach(function(container){
-			// 	container.playSolution();
-			// })	
-			// console.log(solvedObject);
-			//  console.log(solvedObject[0].alreadySolved);
-
 			if(!solvedObject[0].alreadySolved) {
 				solvedObject[0].alreadySolved = true;
 			this.fullSolvedSound = new Howl({ src: solvedObject[0].fullSound });
-			
-
 			solvedObject=JSON.stringify(solvedObject[0].title);
 			this.solvedText=solvedObject;
-			// var soundName = Object.keys(solvedObject);
-			// console.log(soundName);
-			// createP(solvedObject).addClass('text');
-			console.log(this);
-			// setTimeout(this.solvedAnimation.bind(this),500);
 			this.solvedAnimationGlowing()
 			};
 	},
 
 
 	this.checkEvery = function() {
-		 // console.log(this.solvedArray);
 		if(this.solvedArray.every(function(el) {
 				return el > 0;
 			}) && !this.antiSolveSpell) { 
@@ -256,19 +346,13 @@ var Game = function(options) {
 
 
 	this.resetInterface = function() {
-		background(this.background_color);
-		this.drawMeridianMarker();
-		this.stopEverythingForText=false;
-		this.disablePlayback=false;
+
 		if(!this.textIsShowing) {
-		this.containers.forEach(function(container){
-			// container.checkClick();	
-			container.display();
-			// setTimeout(container.display.bind(container),400);		
-			})
-		}
+			this.paused=false;
+			this.disablePlayback=false;		
+			};
 		this.resetSolution();
-	}
+	},
 
 	this.resetSolution = function() {
 		this.solved = false;
@@ -287,7 +371,7 @@ var Game = function(options) {
 
 		this.containers.forEach(function(container){
 				container.markGlowing(this.currentKey);	
-				container.display();
+				 container.display();
 				 //setTimeout(container.display.bind(container),400);		
 			}, this)
 
@@ -300,7 +384,7 @@ var Game = function(options) {
 		this.containers.forEach(function(container){
 			
 			container.markSolved(this.currentKey);	
-			container.display();
+			 container.display();
 			 //setTimeout(container.display.bind(container),400);		
 		}, this)
 		setTimeout(this.showText.bind(this),1000);
@@ -308,17 +392,24 @@ var Game = function(options) {
 
 
 	this.showText = function () {
-
-					if(!this.disablePlayback) {
+ 		
+ 		background(this.background_color);
+		 
+		 if(!this.disablePlayback) {
 				this.fullSolvedSound.play();
 				this.disablePlayback = true;
-				setTimeout(reEnablePlayback, 30000);
+				// setTimeout(reEnablePlayback, 30000);
 				};
-		this.stopEverythingForText=true;
 
-		this.animateText = setInterval(this.textAnimation,100);
+		//this.animateText = setInterval(this.textAnimation,300);
 
-		
+		textSize(this.solvedTextSize);
+		// textFont(solvedFont);
+		textFont('Sans');
+		fill(this.solvedTextColor);
+		text(this.solvedText,this.solvedText_x,this.solvedText_y,this.solvedText_width,this.solvedText_height);
+		setTimeout(this.cleanup,14000);
+		this.fullSolvedSound.fade(1.0,0.0,12000);
 
 	}
 
@@ -326,7 +417,7 @@ var Game = function(options) {
 
 	this.textAnimation = function () {
 		
-		// background(this.background_color);
+		 background(this.background_color);
 		textSize(this.solvedTextSize);
 		// textFont(solvedFont);
 		textFont('Sans');

@@ -1,4 +1,4 @@
-var Cell = function(x, y, width, height,color,borderColor,sound) {
+var Cell = function(x, y, width, height,color,hiddenColor,borderColor,sound) {
 	this.x 			= 	x;
 	this.y 			= 	y;
 	this.width 		=	width;
@@ -10,6 +10,7 @@ var Cell = function(x, y, width, height,color,borderColor,sound) {
 	this.cellColor = color;
 	this.cellBorderColor = borderColor;
 	this.cellStartColor = color;
+	this.hiddenColor = hiddenColor;
 	this.highlightColor = game.highlightColor;
 	this.cellMeridianColor = game.cellMeridianColor;
 	this.soundPlayingColor =  [180,180,120];
@@ -35,7 +36,7 @@ var Cell = function(x, y, width, height,color,borderColor,sound) {
 	this.visible    = 	true;
 	this.trig 		= 	1;
 
-	  console.log(this.key);
+	  // console.log(this.key);
 	// this.display = function() {
 	// 	fill(this._color);
 	// 	rect(this._x, this._y, this._width, this._height);
@@ -67,6 +68,94 @@ var Cell = function(x, y, width, height,color,borderColor,sound) {
 
 	},
 
+
+
+	this.display = function() {
+
+		this.visible === true ? strokeWeight(0.5) : strokeWeight(0.0);	
+		// stroke(this.cellBorderColor);
+		// strokeWeight(20);
+		fill(this.cellBorderColor);
+		rect(this.x-5,this.y,this.width,this.height,10);
+		fill(this.cellColor);		
+		rect(this.x+5,this.y+10,this.width-20,this.height-20,10);
+	},
+
+	this.markAsMeridian = function() {
+		this.onMeridian = true;
+		if(!this.solved) {
+		 this.cellColor= this.hiddenColor;
+	}
+	},
+
+	this.markUnMeridian = function() {
+		this.onMeridian = false;
+		if(!this.solved) {
+			 this.cellColor= this.cellStartColor;
+		}
+		
+	},
+
+	this.markHighlighted = function() {
+		if(!this.solved) {
+		this.highlight = true;
+		// this.cellColor=this.highlightColor;
+		}
+	},
+
+	this.unHighlight = function() {
+		this.highlight = false;
+		// this.cellColor=this.cellStartColor;
+	},	
+
+	this.markSolved = function() {
+		this.solved = true;
+		this.visible=false;
+		this.cellBorderColor = this.solvedColor;
+		this.cellColor = this.solvedColor;
+	},
+
+	this.markGlowing = function() {
+		this.glowing = true;
+		this.cellColor = this.glowingColor;
+	},
+
+	this.markUnGlowing = function() {
+		this.glowing = false;
+		if(this.solved) {
+			this.cellColor=this.solvedColor
+		}
+		else {
+			// this.cellColor=this.cellStartColor;
+		}
+
+	},
+
+
+	this.markUnSolved = function() {
+		this.solved = false;
+	},
+
+	this.resetCellPlaying = function() {
+		  // this.height=this.reset_height;
+		  // this.width=this.reset_width;
+		  // this.x = this.reset_x;
+		  // this.y = this.reset_y;
+		this.clicked = false;
+		 if(!this.solved) {
+		 	this.cellColor = this.cellStartColor;
+			};
+		this.display();
+
+	},
+
+	this.resetCell = function() {
+		this.clicked = false;
+		// this.cellColor = this.oldColor;
+		// this.display();
+
+	},
+
 	this.resetClickPlaying = function() {
 
 		this.clickPlaying = false;
@@ -75,6 +164,59 @@ var Cell = function(x, y, width, height,color,borderColor,sound) {
 	this.resetMoving = function() {
 			this.moving=false;
 	}
+
+
+	this.playSound = function(){
+		this.playing = true;
+		this.sound.play();
+		setTimeout(this.cellPlayingFalse.bind(this),2000);
+	},
+
+
+	this.startBlink = function() {
+	
+		// var blinkTrig = setInterval(this.blinkCellColor.bind(this),100);
+		// clearInterval(blinkTrig,2000)
+	},
+
+	this.blinkCellColor = function(trig) {
+			
+			// this.cellColor=this.cellStartColor;
+			// this.trig===1 ? this.cellColor = this.soundPlayingColor : this.cellColor = this.cellStartColor;
+			// this.display();
+			// this.trig=this.trig+1;
+			// this.trig > 2 ? this.trig=1 : this.trig=this.trig;
+			// console.log(this.trig);
+		
+	},
+
+	this.trigSoundAnimation = function(){
+		 this.oldColor = this.cellColor;
+		
+		// this.cellColor = this.soundPlayingColor;
+		this.cellColor = this.hiddenColor;
+			// this.reset_x = this.x;
+			// this.reset_y = this.y;
+			// this.reset_height = this.height;
+			// this.reset_width = this.width;
+			// this.x = this.x+5;
+			// this.y = this.y+5;
+			// this.height = this.height-10;
+			// this.width = this.width-10;
+		  // this.height = this.init_height-10;
+		  // this.width = this.init_width-10;
+		  // this.x = this.init_x + 5;
+		  // this.y = this.init_y + 5;
+		// this.startBlink();	
+		// this.playing=true;
+		 this.playSound();
+		setTimeout(this.resetCellPlaying.bind(this),10000);
+	}	
+
+
+}
+
+
 
 	// this.updateColor = function() {		
 
@@ -100,138 +242,3 @@ var Cell = function(x, y, width, height,color,borderColor,sound) {
 	// 	// 	}
 	// 	// }	
 	// },
-
-
-	this.display = function() {
-
-		this.visible === true ? strokeWeight(0.5) : strokeWeight(0.0);	
-		// stroke(this.cellBorderColor);
-		// strokeWeight(20);
-		fill(this.cellBorderColor);
-		rect(this.x-5,this.y,this.width,this.height);
-		fill(this.cellColor);		
-		rect(this.x+5,this.y+10,this.width-20,this.height-20);
-	},
-
-	this.markAsMeridian = function() {
-		this.onMeridian = true;
-		if(!this.solved) {
-		this.cellColor= this.cellMeridianColor;
-	}
-	},
-
-	this.markUnMeridian = function() {
-		this.onMeridian = false;
-		if(!this.solved) {
-			this.cellColor= this.cellStartColor;
-		}
-		
-	},
-
-	this.markHighlighted = function() {
-		if(!this.solved) {
-		this.highlight = true;
-		this.cellColor=this.highlightColor;
-		}
-	},
-
-	this.unHighlight = function() {
-		this.highlight = false;
-		this.cellColor=this.cellStartColor;
-	},	
-
-	this.markSolved = function() {
-		this.solved = true;
-		this.visible=false;
-		this.cellBorderColor = this.solvedColor;
-		this.cellColor = this.solvedColor;
-	},
-
-	this.markGlowing = function() {
-		this.glowing = true;
-		this.cellColor = this.glowingColor;
-	},
-
-	this.markUnGlowing = function() {
-		this.glowing = false;
-		if(this.solved) {
-			this.cellColor=this.solvedColor
-		}
-		else {
-			this.cellColor=this.cellStartColor;
-		}
-
-	},
-
-
-	this.markUnSolved = function() {
-		this.solved = false;
-	},
-
-	this.resetCellPlaying = function() {
-		  this.height=this.reset_height;
-		  this.width=this.reset_width;
-		  this.x = this.reset_x;
-		  this.y = this.reset_y;
-		this.clicked = false;
-		this.cellColor = this.oldColor;
-		this.display();
-
-	},
-
-		this.resetCell = function() {
-		this.clicked = false;
-		this.cellColor = this.oldColor;
-		this.display();
-
-	},
-
-
-	this.playSound = function(){
-		this.playing = true;
-		this.sound.play();
-		setTimeout(this.cellPlayingFalse.bind(this),2000);
-	},
-
-
-	this.startBlink = function() {
-	
-		// var blinkTrig = setInterval(this.blinkCellColor.bind(this),100);
-		// clearInterval(blinkTrig,2000)
-	},
-
-	this.blinkCellColor = function(trig) {
-			
-			this.cellColor=this.cellStartColor;
-			// this.trig===1 ? this.cellColor = this.soundPlayingColor : this.cellColor = this.cellStartColor;
-			// this.display();
-			// this.trig=this.trig+1;
-			// this.trig > 2 ? this.trig=1 : this.trig=this.trig;
-			// console.log(this.trig);
-		
-	},
-
-	this.trigSoundAnimation = function(){
-		this.oldColor = this.cellColor;
-		
-		this.cellColor = this.soundPlayingColor;
-			this.reset_x = this.x;
-			this.reset_y = this.y;
-			this.reset_height = this.height;
-			this.reset_width = this.width;
-			this.x = this.x+5;
-			this.y = this.y+5;
-			this.height = this.height-10;
-			this.width = this.width-10;
-		  // this.height = this.init_height-10;
-		  // this.width = this.init_width-10;
-		  // this.x = this.init_x + 5;
-		  // this.y = this.init_y + 5;
-		// this.startBlink();	
-		// this.playing=true;
-		 this.playSound();
-		setTimeout(this.resetCellPlaying.bind(this),300);
-	}	
-
-
-}

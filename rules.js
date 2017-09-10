@@ -40,8 +40,10 @@ var Rules = function(x,y,height,width,bgColor,textColor) {
 
 
 	this.initRules = function() {
-		fill(this.rulesBGcolor);
-		rect(this.x, this.y, this.width,this.height);
+		// fill(this.rulesBGcolor);
+		// rect(this.x, this.y, this.width,this.height);
+		stroke(this.textColor);
+		strokeWeight(1);
 		textSize(this.fontSize);
 		textFont('Sans');
 		fill(this.textColor);
