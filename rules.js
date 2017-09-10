@@ -35,6 +35,7 @@ var Rules = function(x,y,height,width,bgColor,textColor) {
 	this.rule8 = "";
 	this.rule9 = "(more levels coming soon)";
 	this.fontSize = 22;
+	this.rulesFont = rulesFont;
 
 
 
@@ -45,7 +46,8 @@ var Rules = function(x,y,height,width,bgColor,textColor) {
 		stroke(this.textColor);
 		strokeWeight(1);
 		textSize(this.fontSize);
-		textFont('Sans');
+		// textFont('Sans');
+		textFont(rulesFont);
 		fill(this.textColor);
 
 		text(this.rule1,this.x+20,this.y+20,this.width,this.height);

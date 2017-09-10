@@ -1,5 +1,6 @@
 var game;
 var solvedFont;
+var rulesFont;
    var canvas;
       var canvasWidth;
       var ctx;
@@ -46,6 +47,7 @@ function touchmove(e) {
 
 function setup() {
 	solvedFont = loadFont("fonts/Lato-Black.ttf");
+  rulesFont = loadFont("fonts/Questrial-Regular.ttf");
 	createCanvas(windowWidth,windowHeight);
 	game = new Game(gameOptions);
 	game.initGame();
