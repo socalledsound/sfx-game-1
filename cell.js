@@ -13,8 +13,7 @@ var Cell = function(x, y, width, height,color,hiddenColor,borderColor,sound) {
 	this.hiddenColor = hiddenColor;
 	this.highlightColor = game.highlightColor;
 	this.cellMeridianColor = game.cellMeridianColor;
-	this.soundPlayingColor =  [180,180,120];
-	this.glowingColor=game.glowingColor;
+	this.glowingColor = game.glowingColor;
 	this.solvedColor =	game.solvedColor; 		
 
 	
@@ -83,7 +82,7 @@ var Cell = function(x, y, width, height,color,hiddenColor,borderColor,sound) {
 
 	this.markAsMeridian = function() {
 		this.onMeridian = true;
-		if(!this.solved) {
+		if(!this.solved && !this.glowing ) {
 		 this.cellColor= this.hiddenColor;
 	}
 	},
@@ -91,7 +90,7 @@ var Cell = function(x, y, width, height,color,hiddenColor,borderColor,sound) {
 	this.markUnMeridian = function() {
 		this.onMeridian = false;
 		if(!this.solved) {
-			 this.cellColor= this.cellStartColor;
+			 this.cellColor= this.cellColor;
 		}
 		
 	},
@@ -110,7 +109,8 @@ var Cell = function(x, y, width, height,color,hiddenColor,borderColor,sound) {
 
 	this.markSolved = function() {
 		this.solved = true;
-		this.visible=false;
+		this.glowing = false;
+		// this.visible=false;
 		this.cellBorderColor = this.solvedColor;
 		this.cellColor = this.solvedColor;
 	},
@@ -118,17 +118,11 @@ var Cell = function(x, y, width, height,color,hiddenColor,borderColor,sound) {
 	this.markGlowing = function() {
 		this.glowing = true;
 		this.cellColor = this.glowingColor;
+		console.log(this.glowingColor);
 	},
 
 	this.markUnGlowing = function() {
 		this.glowing = false;
-		if(this.solved) {
-			this.cellColor=this.solvedColor
-		}
-		else {
-			// this.cellColor=this.cellStartColor;
-		}
-
 	},
 
 
@@ -145,7 +139,7 @@ var Cell = function(x, y, width, height,color,hiddenColor,borderColor,sound) {
 		 if(!this.solved) {
 		 	this.cellColor = this.cellStartColor;
 			};
-		this.display();
+		// this.display();
 
 	},
 

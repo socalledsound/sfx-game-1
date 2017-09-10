@@ -20,6 +20,10 @@ var Container = function(x,y,width,height,meridian,color,numCells,sounds) {
 	// this.scrambledKeys = ["A","A","A","A"];
 	// this.sound = new Howl({src:['audio/2017clapOS-DG3__1.mp3']});
 
+	
+
+
+
 	this.initCells = function() {
 				 this.initKeys = Object.keys(this.sounds);
 				 // console.log(this.initKeys);
@@ -35,20 +39,16 @@ var Container = function(x,y,width,height,meridian,color,numCells,sounds) {
 
 			for ( var i=0; i<this.numCells; i++) {
 				var x= this._x + (this._width/20);
-				var y= this._y + ((this._height/this.numCells)*i);
+				var y= this._y + ((this._height/this.numCells)*i) + (game.spacer*i);
 				var width = this._width * 1.0;
 				var height = this._height/this.numCells;
+				var spacer = game.spacer;
 				var color = game.cellStartColor;
 				var hiddenColor = game.cellHiddenColors[scrambledOrder[i]];
 				var borderColor=game.cellBorderColor;
-				// this.scrambledSounds=this.scrambleSounds(this.sounds,keys);
-				// var cellSounds = this.sounds;
 				var cellSound = this.sounds[scrambledOrder[i]];
-				// var cellKey = this.scrambledKeys[i].charAt(0);
-				 // console.log(cellSound);
-				// var sound = new Howl({src:[this.sound] });
 				this.cells[i] = new Cell(x, y, width, height, color, hiddenColor, borderColor,cellSound);
-				 // console.log(this.cells[i]);
+				 console.log(this.cells[i].y);
 			}
 	},
 
@@ -227,28 +227,7 @@ var Container = function(x,y,width,height,meridian,color,numCells,sounds) {
 		return (mouseX > this._x && mouseX < this._x + this._width && mouseY > this._y && mouseY < this._y + this._height)		
 	},
 
-	this.checkPlayhead = function(x) {
-		var currentColumn;
-		// if (x <40) { currentColumn = 5};
-		// if (x > 30 && x < 145) {currentColumn = 0};
-		// if (x >140 && x < 245) {currentColumn = 1};
-		// if (x >240 && x < 365) {currentColumn = 2};
-		// if (x >360 && x < 450) {currentColumn = 3};
-		// if (x >450 && x < 555) {currentColumn = 4};
-		// if (x >530) {currentColumn = 5};
-		 // console.log(currentColumn);
-		if (x <140) { currentColumn = 5};
-		if (x > 130 && x < 245) {currentColumn = 0};
-		if (x >240 && x < 345) {currentColumn = 1};
-		if (x >340 && x < 465) {currentColumn = 2};
-		if (x >460 && x < 550) {currentColumn = 3};
-		if (x >550 && x < 655) {currentColumn = 4};
-		if (x >630) {currentColumn = 5};
 
-
-		return currentColumn;
-		
-	},
 	this.display = function() {
 
 			this.cells.forEach(function(cell,index){
@@ -259,6 +238,40 @@ var Container = function(x,y,width,height,meridian,color,numCells,sounds) {
 
 
 
+	this.move = function() {
+
+		if(this._y > 0 && this._y < (1000)) {
+		this._y = mouseY;
+		this.moveCells();
+		};
+
+		if (this._y < 40) {this._y = 40};
+
+		if (this._y > 360) {this._y = 360 };
+		this.settleInGrid();
+		this.cells.forEach(function(cell,index){
+		cell.checkBoundary();
+		});
+		console.log(this._y);
+	},
+
+	this.moveBy_y = function(amount) {
+		
+		if(this._y > 0 && this._y < (1000)) {
+		this._y = this._y + amount;
+		this.moveCells();
+		};
+
+		if (this._y < 40) {this._y=40};
+
+		if (this._y > 360) {this._y = (360 )};
+		this.settleInGrid();
+		this.cells.forEach(function(cell,index){
+		cell.checkBoundary();
+		});
+	},
+
+
 	this.moveCells = function() {
 		var that = this;
 			// console.log(this._y);
@@ -266,7 +279,7 @@ var Container = function(x,y,width,height,meridian,color,numCells,sounds) {
 			that.cells.forEach(function(cell,index){
 				// console.log(index);
 				cell.x= that._x + (that._width/20);
-				cell.y = that._y + ((that._height/that.numCells)*index);
+				cell.y = that._y + ((that._height/that.numCells)*index)  + (game.spacer*index);
 				cell.width = that._width * 1.0;
 				cell.height = that._height/that.numCells;
 				cell.moving=true;
@@ -296,39 +309,6 @@ var Container = function(x,y,width,height,meridian,color,numCells,sounds) {
 	},
 
 
-
-	this.move = function() {
-
-		if(this._y > 0 && this._y < (1000)) {
-		this._y = mouseY;
-		this.moveCells();
-		};
-
-		if (this._y < 40) {this._y=40};
-
-		if (this._y > 360) {this._y = (360 )};
-		this.settleInGrid();
-		this.cells.forEach(function(cell,index){
-		cell.checkBoundary();
-		});
-	},
-
-	this.moveBy_y = function(amount) {
-		
-		if(this._y > 0 && this._y < (1000)) {
-		this._y = this._y + amount;
-		this.moveCells();
-		};
-
-		if (this._y < 40) {this._y=40};
-
-		if (this._y > 360) {this._y = (360 )};
-		this.settleInGrid();
-		this.cells.forEach(function(cell,index){
-		cell.checkBoundary();
-		});
-	},
-
 	this.scrambleSounds = function(sounds,keys) {
 		
 			var scrambled  = sounds;
@@ -350,20 +330,21 @@ var Container = function(x,y,width,height,meridian,color,numCells,sounds) {
 		// if(this._y > 180 && this._y <270 ) 	{this._y = 180};
 		// if(this._y > 270 && this._y <360 ) 	{this._y = 260};
 
-		if(this._y > 0 && this._y < 120 ) 	{this._y = 40};
-		if(this._y > 110 && this._y <200 ) 	{this._y = 120};
+		if(this._y > 0 && this._y < 120 ) 	{this._y = 30};
+		if(this._y > 110 && this._y <200 ) 	{this._y = 115};
 		if(this._y > 200 && this._y <280 ) 	{this._y = 200};
-		if(this._y > 280 && this._y <360 ) 	{this._y = 280};
-		if(this._y > 360 && this._y <440 ) 	{this._y = 360};
+			
+		if(this._y > 280 && this._y <360 ) 	{this._y = 285};
+		if(this._y > 350 && this._y <440 ) 	{this._y = 370};
 
 	},
 
 	this.settleCellsInGrid = function() {
 		this.cells.forEach(function(cell,index){
 			if(cell.y > 0 && cell.y < 90 ) 	{cell.y = 20};
-			if(cell.y > 90 && cell.y <180 ) 	{cell.y = 100};
-			if(cell.y > 180 && cell.y <270 ) 	{cell.y = 180};
-			if(cell.y > 270 && cell.y <360 ) 	{cell.y = 260};
+			if(cell.y > 90 && cell.y <180 ) 	{cell.y = 105};
+			if(cell.y > 180 && cell.y <270 ) 	{cell.y = 190};
+			if(cell.y > 270 && cell.y <360 ) 	{cell.y = 275};
 		})
 	},
 
@@ -373,4 +354,28 @@ var Container = function(x,y,width,height,meridian,color,numCells,sounds) {
 	}
 
 }
+
+
+	// this.checkPlayhead = function(x) {
+	// 	var currentColumn;
+	// 	// if (x <40) { currentColumn = 5};
+	// 	// if (x > 30 && x < 145) {currentColumn = 0};
+	// 	// if (x >140 && x < 245) {currentColumn = 1};
+	// 	// if (x >240 && x < 365) {currentColumn = 2};
+	// 	// if (x >360 && x < 450) {currentColumn = 3};
+	// 	// if (x >450 && x < 555) {currentColumn = 4};
+	// 	// if (x >530) {currentColumn = 5};
+	// 	 // console.log(currentColumn);
+	// 	if (x <140) { currentColumn = 5};
+	// 	if (x > 130 && x < 245) {currentColumn = 0};
+	// 	if (x >240 && x < 345) {currentColumn = 1};
+	// 	if (x >340 && x < 465) {currentColumn = 2};
+	// 	if (x >460 && x < 550) {currentColumn = 3};
+	// 	if (x >550 && x < 655) {currentColumn = 4};
+	// 	if (x >630) {currentColumn = 5};
+
+
+	// 	return currentColumn;
+		
+	// },
 

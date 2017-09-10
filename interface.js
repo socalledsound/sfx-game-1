@@ -43,32 +43,7 @@ var PlayButton = function(x,y,width,height) {
 	this.paused 	= 	true;
 }
 
-var Triangle = function(a,b,c,d,e,f,fillColor,strokeColor,type) {
-			this.a = a;
-			this.b = b;
-			this.c = c;
-			this.d = d;
-			this.e = e;
-			this.f = f;
-			this.fillColor=fillColor;
-			this.strokeColor = strokeColor;
-			this.type = type;
 
-		this.display = function() {
-			fill(this.fillColor);
-			stroke(this.strokeColor);
-			strokeWeight(3);
-			triangle(this.a,this.b,this.c,this.d,this.e,this.f);
-			triangle(this.a,this.b,this.c,this.d,this.e,this.f);
-			// console.log(this.type);
-			// stroke(this.interfaceStrokeColor);
-		}		
-				// stroke(this.strokeColor);
-				// strokeWeight(3);
-				// fill(this.fillColor);
-				// triangle(this.a,this.b,this.c,this.d,this.e,this.f);
-
-};
 
 var CellRow = function(options) {
 	this._x = options.x;
