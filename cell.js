@@ -82,6 +82,32 @@ var Cell = function(x, y, width, height,color,hiddenColor,borderColor,sound) {
 		rect(this.x+5,this.y+10,this.width-20,this.height-20,10);
 	},
 
+	this.displayGlowing = function() {
+
+		this.visible === true ? strokeWeight(0.5) : strokeWeight(0.0);	
+		// stroke(this.cellBorderColor);
+		// strokeWeight(20);
+			for(var i=0;i<10;i++) {
+				var color=this.cellColor;
+				var borderColor=this.cellBorderColor;
+				var x = this.x;
+				var y = this.y;
+				var height = this.height;
+				var width = this.width;
+				// scale(1.01);
+				(function(ind) {
+					setTimeout(function() {	
+			
+					fill(borderColor);
+					rect(x,y,width,height+i,10);
+					fill(color);		
+					rect(x+5,y+10,width-20,height-20+i,10);
+
+					}.bind(this),ind*100);	
+				})(i,borderColor,color,x,y,width,height);
+			}
+	},
+
 	this.markAsMeridian = function() {
 		this.onMeridian = true;
 		if(!this.solved && !this.glowing ) {

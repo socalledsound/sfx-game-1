@@ -240,7 +240,7 @@ var Container = function(x,y,width,height,meridian,color,numCells,sounds) {
 
 			this.cells.forEach(function(cell){
 				if (cell.glowing) {
-					cell.display();
+					cell.displayGlowing();
 				}
 				
 			}) 		

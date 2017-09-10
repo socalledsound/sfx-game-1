@@ -202,7 +202,8 @@ var Game = function(options) {
 	this.drawGlowing = function() {
 		background(this.background_color);
 		this.containers.forEach(function(container,index){
-				setTimeout(container.displayGlowing.bind(container),100*index);
+				// setTimeout(container.displayGlowing.bind(container),100*index);
+				container.displayGlowing();
 						
 			})
 	},
