@@ -477,7 +477,7 @@ var Game = function(options) {
 
 
 	this.cleanup = function() {
-	
+		this.sortedTextArray=[];
 		clearInterval(this.animateText);
 		this.resetInterface();
 		
