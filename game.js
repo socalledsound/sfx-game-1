@@ -43,6 +43,7 @@ var Game = function(options) {
 
 	this.solvedArray = [0,0,0,0,0];
 	this.solvedText;
+	this.solvedTextArray=[];
 	this.solvedTextSize=60;
 	// this.solvedTextFont='Arial';
 	this.solvedText_x=options.xStart+5;
@@ -427,14 +428,27 @@ var Game = function(options) {
 		//this.animateText = setInterval(this.textAnimation,300);
 
 		textSize(this.solvedTextSize);
-		 textFont(solvedFont);
+		 textFont(rulesFont);
 		 // textBounds();
-		textFont('Serif');
+		 //textFont('Serif');
 		strokeWeight(3);
 		textAlign(CENTER);
-
 		fill(this.solvedTextColor);
-		text(this.solvedText,this.solvedText_x,this.solvedText_y,this.solvedText_width,this.solvedText_height);
+
+		this.solvedText = this.solvedText.split(" ");
+		console.log(this.solvedText);
+		for (var i=0; i<this.solvedText.length; i++) {
+			this.solvedTextArray.push(this.solvedText[i]);
+			};
+			console.log(this.solvedTextArray);
+		this.solvedTextArray.forEach(function(item,index) {
+			console.log(item);
+			console.log(index);
+			text(item,this.solvedText_x,this.solvedText_y+60*index,this.solvedText_width,this.solvedText_height);
+		},this)
+			
+		
+
 		setTimeout(this.cleanup,14000);
 		this.fullSolvedSound.fade(1.0,0.0,12000);
 
