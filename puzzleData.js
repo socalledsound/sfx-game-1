@@ -15,17 +15,30 @@ const puzzleData = {
 	// 		{A5:"sounds/zippers/canvas-suitcase-zipper/cszipper5.mp3"}
 	// 	]
 	// },
-		{
-		title: "cartoon monkeys chattering in a court of laws",
-		fullSound: "sounds/monkeys/monkeys-full.mp3",
+	// 	{
+	// 	title: "A LARGE GROUP OF CHILDREN LAUGHING IN A PRETEND COURTROOM",
+	// 	fullSound: "sounds/monkeys/monkeys-full.mp3",
+	// 	solutionKey:"A",
+	// 	alreadySolved: false,
+	// 	clips: [
+	// 		{A1:"sounds/monkeys/monkeys2.mp3"},
+	// 		{A2:"sounds/monkeys/monkeys1.mp3"},
+	// 		{A3:"sounds/monkeys/monkeys3.mp3"},
+	// 		{A4:"sounds/monkeys/monkeys4.mp3"},
+	// 		{A5:"sounds/monkeys/monkeys5.mp3"}
+	// 	]
+	// },
+			{
+		title: "A LARGE GROUP OF CHILDREN LAUGHING IN A PRETEND COURTROOM",
+		fullSound: "sounds/children-courtroom/crowd-chatter-full.mp3",
 		solutionKey:"A",
 		alreadySolved: false,
 		clips: [
-			{A1:"sounds/monkeys/monkeys2.mp3"},
-			{A2:"sounds/monkeys/monkeys1.mp3"},
-			{A3:"sounds/monkeys/monkeys3.mp3"},
-			{A4:"sounds/monkeys/monkeys4.mp3"},
-			{A5:"sounds/monkeys/monkeys5.mp3"}
+			{A1:"sounds/children-courtroom/crowdChatter1.mp3"},
+			{A2:"sounds/children-courtroom/crowdChatter2.mp3"},
+			{A3:"sounds/children-courtroom/crowdChatter3.mp3"},
+			{A4:"sounds/children-courtroom/crowdChatter4.mp3"},
+			{A5:"sounds/children-courtroom/crowdChatter5.mp3"}
 		]
 	},
 	{
