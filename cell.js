@@ -31,6 +31,8 @@ var Cell = function(x, y, width, height,color,hiddenColor,borderColor,sound) {
 	this.clicked 	=	false;
 	this.highlight  = 	false;
 	this.onMeridian = 	false;
+	this.revealed 	= 	false;
+	this.glowing 	=	false;
 	this.solved 	= 	false;
 	this.visible    = 	true;
 	this.trig 		= 	1;
@@ -92,7 +94,7 @@ var Cell = function(x, y, width, height,color,hiddenColor,borderColor,sound) {
 		if(!this.solved) {
 			 this.cellColor= this.cellColor;
 		}
-		
+		this.resetCellMeridian();
 	},
 
 	this.markHighlighted = function() {
@@ -131,17 +133,21 @@ var Cell = function(x, y, width, height,color,hiddenColor,borderColor,sound) {
 	},
 
 	this.resetCellPlaying = function() {
-		  // this.height=this.reset_height;
-		  // this.width=this.reset_width;
-		  // this.x = this.reset_x;
-		  // this.y = this.reset_y;
 		this.clicked = false;
+		this.revealed=false;
 		 if(!this.solved) {
 		 	this.cellColor = this.cellStartColor;
 			};
 		// this.display();
 
 	},
+
+	this.resetCellMeridian = function() {
+		if(!this.onMeridian && !this.revealed) {
+			this.cellColor = this.cellStartColor;
+		}
+	},
+
 
 	this.resetCell = function() {
 		this.clicked = false;
@@ -188,6 +194,7 @@ var Cell = function(x, y, width, height,color,hiddenColor,borderColor,sound) {
 		 this.oldColor = this.cellColor;
 		
 		// this.cellColor = this.soundPlayingColor;
+		this.revealed = true;
 		this.cellColor = this.hiddenColor;
 			// this.reset_x = this.x;
 			// this.reset_y = this.y;

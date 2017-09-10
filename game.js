@@ -171,10 +171,10 @@ var Game = function(options) {
 
 	this.drawMeridianBox = function() {
 		stroke(this.highlightColor);
-		strokeWeight(15);
+		strokeWeight(10);
 		// fill(this.highlightColor);
 		noFill();
-		rect(75,365,510,90,10);
+		rect(70,368,520,85,10);
 		stroke(this.interfaceColor);
 	},
 
@@ -191,6 +191,22 @@ var Game = function(options) {
 		this.drawContainers();
 		this.drawInterface();
 		this.checkSolution();
+	},
+
+	this.drawGlowing = function() {
+		background(this.background_color);
+		this.containers.forEach(function(container,index){
+				setTimeout(container.displayGlowing.bind(container),100*index);
+						
+			})
+	},
+
+	this.drawSolved = function() {
+		background(this.background_color);
+		this.containers.forEach(function(container,index){
+				container.displaySolved();
+						
+			})
 	},
 
 	this.checkSolution = function () {
@@ -260,15 +276,15 @@ var Game = function(options) {
 
 
 	this.moveColumnUpOneRow = function (index) {
-		this.upperTriangles[index].moveBy_y(this.boxHeight * -1);
-		this.lowerTriangles[index].moveBy_y(this.boxHeight * -1);
-		this.containers[index].moveBy_y(this.boxHeight * -1);
+		this.upperTriangles[index].moveBy_y((this.spacer + this.boxHeight) * -1);
+		this.lowerTriangles[index].moveBy_y((this.spacer + this.boxHeight) * -1);
+		this.containers[index].moveBy_y((this.spacer + this.boxHeight) * -1);
 	},
 
 	this.moveColumnDownOneRow = function (index) {
-		this.upperTriangles[index].moveBy_y(this.boxHeight);
-		this.lowerTriangles[index].moveBy_y(this.boxHeight);
-		this.containers[index].moveBy_y(this.boxHeight);
+		this.upperTriangles[index].moveBy_y(this.boxHeight + this.spacer);
+		this.lowerTriangles[index].moveBy_y(this.boxHeight  + this.spacer);
+		this.containers[index].moveBy_y(this.boxHeight  + this.spacer);
 	},
 
 
@@ -372,12 +388,13 @@ var Game = function(options) {
 
 
 	this.solvedAnimationGlowing = function() {
-		
+		this.paused = true;
 		this.containers.forEach(function(container){
 				container.markGlowing(this.currentKey);			
 			}, this)
 
 		this.magicSolvedSound.play();
+		this.drawGlowing();
 		// this.drawGameNoBox();
 		setTimeout(this.solvedAnimationGrey.bind(this),2000);	
 	}
@@ -387,13 +404,13 @@ var Game = function(options) {
 		this.containers.forEach(function(container){			
 			container.markSolved(this.currentKey);		
 		}, this)
-		this.drawGame();
+		this.drawSolved();
 		setTimeout(this.showText.bind(this),2000);
 	},
 
 
 	this.showText = function () {
- 		this.paused = true;
+ 		
  		background(this.background_color);
 		 
 		 if(!this.disablePlayback) {
@@ -405,11 +422,12 @@ var Game = function(options) {
 		//this.animateText = setInterval(this.textAnimation,300);
 
 		textSize(this.solvedTextSize);
-		// textFont(solvedFont);
-		textFont('Sans');
+		 textFont(solvedFont);
+		 // textBounds();
+		textFont('Serif');
 		strokeWeight(3);
 		textAlign(CENTER);
-		
+
 		fill(this.solvedTextColor);
 		text(this.solvedText,this.solvedText_x,this.solvedText_y,this.solvedText_width,this.solvedText_height);
 		setTimeout(this.cleanup,14000);

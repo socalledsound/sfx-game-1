@@ -236,6 +236,26 @@ var Container = function(x,y,width,height,meridian,color,numCells,sounds) {
 			}) 		
 	},
 
+	this.displayGlowing = function() {
+
+			this.cells.forEach(function(cell){
+				if (cell.glowing) {
+					cell.display();
+				}
+				
+			}) 		
+	},
+
+		this.displaySolved = function() {
+
+			this.cells.forEach(function(cell){
+				if (cell.solved) {
+					cell.display();
+				}
+				
+			}) 		
+	},
+
 
 
 	this.move = function() {
