@@ -53,6 +53,7 @@ var Game = function(options) {
 	this.antiSolveSpell = false;
 	this.disablePlayback = false;
 	this.noInterface = false;
+	this.showRules = true;
 	// this.disableInterface = false;
 	this.paused=false;
 	this.curIndex=0;
@@ -67,7 +68,7 @@ var Game = function(options) {
 		this.loadPuzzleSounds();
 		
 		this.initContainers();
-		this.initInterface();
+		// this.initInterface();
 		
 	},
 
@@ -83,13 +84,16 @@ var Game = function(options) {
 			}, this);
 	}
 
-	this.initInterface = function () {
+	this.drawRules = function () {
+		if(this.showRules) {
 		stroke(30,100,100);
 
 		this.drawInterface();
 		this.rules = new Rules(options.rulesX,options.rulesY,options.rulesHeight,options.rulesWidth,options.background_color,options.rulesTextColor);
 		this.rules.initRules();
+		};
 	}
+
 
 
 
@@ -188,6 +192,7 @@ var Game = function(options) {
 
 	this.drawGame = function() {
 		background(this.background_color);
+		this.drawRules();
 		this.drawContainers();
 		this.drawInterface();
 		this.checkSolution();
@@ -321,7 +326,7 @@ var Game = function(options) {
 	this.dragged = function() {
 		background(this.background_color);
 		this.antiSolveSpell=false;
-
+		this.showRules=false;
 		if(!this.noInterface) {
 			this.containers.forEach(function(container,index) {
 				container.checkDraggable();
