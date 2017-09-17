@@ -31,7 +31,7 @@ var gameOptions = {
 	spacer: 5,
 	playHead_x:10,
 	mainClickSoundPath:'sounds/interfaceSounds/mainClick.mp3',
-	magicSolvedSoundPath: 'sounds/interfaceSounds/magicalSolvedSound.mp3'
+	magicSolvedSoundPath: 'sounds/interfaceSounds/solvedSoundx3.mp3'
 
 };
 
